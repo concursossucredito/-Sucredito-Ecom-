@@ -594,7 +594,7 @@ img,svg{
   }
   body{
     position:relative;
-    touch-action:pan-y;
+    touch-action:manipulation;
   }
   .header{
     width:100%;
@@ -918,6 +918,19 @@ html,body{overflow-x:clip !important}
 .foot-col a.foot-map-link{display:inline-flex;margin-top:8px;font-size:13.5px;color:var(--yellow)}
 @media(max-width:900px){.foot-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.foot-grid{grid-template-columns:1fr}.foot-map iframe{height:200px}}
+
+/* ===== V9 · BUSCADOR EN CELULAR ===== */
+#productos{scroll-margin-top:130px}
+.search input{-webkit-appearance:none;appearance:none}
+.search input::-webkit-search-cancel-button{-webkit-appearance:none}
+.search-suggestions{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+@media(max-width:760px){
+  /* 16px evita el zoom automático de iPhone al tocar el buscador */
+  .search input{font-size:16px !important}
+  .search-suggestions{max-height:min(300px,42vh) !important;overflow-y:auto}
+  .search-suggestion{padding:10px 12px}
+  #productos{scroll-margin-top:118px}
+}
 </style>
 </head>
 
@@ -1379,6 +1392,7 @@ function mostrarSugerencias(){
       searchInput.value = `${producto.marca} ${producto.nombre}`;
       busqueda = searchInput.value;
       suggestionsEl.classList.remove("show");
+      searchInput.blur();
 
       trackEvent("Búsqueda", "selección_sugerencia", `${producto.marca} ${producto.nombre}`);
       renderProductos();
@@ -1402,8 +1416,10 @@ function mostrarSugerencias(){
 }
 
 function ejecutarBusqueda(){
+  clearTimeout(_buscarTimer);
   busqueda = searchInput.value;
   renderProductos();
+  searchInput.blur();
 
   if (busqueda.trim().length >= 2) {
     trackEvent("Búsqueda", "buscar", busqueda.trim());
@@ -1415,10 +1431,12 @@ function ejecutarBusqueda(){
   }
 }
 
+let _buscarTimer = null;
 searchInput.addEventListener("input", () => {
   busqueda = searchInput.value;
-  renderProductos();
   mostrarSugerencias();
+  clearTimeout(_buscarTimer);
+  _buscarTimer = setTimeout(renderProductos, 300);
 });
 
 searchInput.addEventListener("focus", () => {
@@ -1573,5 +1591,19 @@ No poner contraseñas reales en este index.html.
   </button>
 </div>
 
+
+<script>
+/* Evita el zoom al tocar el buscador y lo deja volver a su tamaño normal al salir */
+(function(){
+  var meta=document.querySelector('meta[name="viewport"]');
+  var input=document.getElementById('searchInput');
+  if(!meta||!input) return;
+  var base='width=device-width, initial-scale=1.0';
+  function lock(){ meta.setAttribute('content', base+', maximum-scale=1.0'); }
+  function unlock(){ meta.setAttribute('content', base); window.scrollTo(window.scrollX, window.scrollY); }
+  input.addEventListener('focus', lock);
+  input.addEventListener('blur', function(){ setTimeout(unlock,150); });
+})();
+</script>
 </body>
 </html>
