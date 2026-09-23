@@ -5,8 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Regalos para mamá exclusivos para clientes Sucrédito. Celulares, parlantes, smartwatches, audio y más.">
 <title>Sucrédito · Día de la Madre · Catálogo</title>
-<link rel="icon" type="image/png" href="https://concursossucredito.github.io/-Sucredito-Ecom-/assets/logo-sucredito.png">
-<link rel="apple-touch-icon" href="https://concursossucredito.github.io/-Sucredito-Ecom-/assets/logo-sucredito.png">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/favicon-180.png">
 <meta name="theme-color" content="#FFEE00">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -879,6 +880,44 @@ img,svg{
 .steps-img{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px}
 .steps-img img{width:100%;height:auto;display:block;border-radius:20px;box-shadow:0 8px 22px rgba(20,36,58,.10)}
 @media(max-width:760px){.steps-img{grid-template-columns:1fr;gap:14px;margin-top:17px}}
+
+/* ===== V9 · HEADER FIJO + LOGO FOOTER ===== */
+/* overflow:hidden en html/body rompía position:sticky; clip evita el scroll lateral sin romperlo */
+html,body{overflow-x:clip !important}
+.header{position:sticky !important;top:0 !important;z-index:1000}
+.footer .footer-logo{
+  filter:none !important;
+  background:var(--yellow);
+  padding:8px 16px;border-radius:12px;
+  box-sizing:content-box;
+  max-width:100%;
+}
+
+/* ===== V9 · FOOTER EN COLUMNAS ===== */
+.footer{background:#111827 !important;color:#fff;padding:44px 28px 22px !important}
+.foot-grid{max-width:1340px;margin:auto;display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:36px}
+.foot-brand p{color:#c7cbd1 !important;font-weight:400 !important;font-size:15px;line-height:1.6;margin:16px 0 0;max-width:290px}
+.foot-col h4{margin:0 0 16px;font-size:17px;color:#fff}
+.foot-col a{display:flex;align-items:center;gap:10px;color:#c7cbd1;font-size:15px;padding:6px 0;transition:.2s}
+.foot-col a:hover{color:var(--yellow)}
+.foot-col svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.foot-col:last-child a svg{color:#ff4d7a}
+.foot-bottom{max-width:1340px;margin:34px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,.1);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#8b93a1;font-size:13.5px}
+.foot-heart{color:#ff4d7a}
+@media(max-width:900px){.foot-grid{grid-template-columns:1fr 1fr;gap:28px}}
+@media(max-width:560px){
+  .footer{padding:34px 20px 22px !important}
+  .foot-grid{grid-template-columns:1fr;gap:24px}
+  .foot-bottom{flex-direction:column;text-align:left}
+}
+
+/* ===== V9 · MAPA EN EL FOOTER ===== */
+.foot-grid{grid-template-columns:1.1fr .8fr .8fr 1.35fr}
+.foot-map{margin-top:12px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.14);background:#1f2937}
+.foot-map iframe{display:block;width:100%;height:180px;border:0}
+.foot-col a.foot-map-link{display:inline-flex;margin-top:8px;font-size:13.5px;color:var(--yellow)}
+@media(max-width:900px){.foot-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.foot-grid{grid-template-columns:1fr}.foot-map iframe{height:200px}}
 </style>
 </head>
 
@@ -887,11 +926,10 @@ img,svg{
   <img src="https://concursossucredito.github.io/-Sucredito-Ecom-/assets/logo-sucredito.png" alt="">
 </div>
 
-<header class="header">
+<header class="header" id="top">
   <nav class="nav">
     <a class="brand" href="#" aria-label="Sucrédito">
       <img class="brand-logo" src="https://concursossucredito.github.io/-Sucredito-Ecom-/assets/logo-sucredito.png" alt="Sucrédito">
-      <span class="brand-sub">Siempre con vos</span>
     </a>
 
     <div class="search">
@@ -909,7 +947,6 @@ img,svg{
 </span>
       <div>Comprá por<br><strong>WhatsApp</strong></div>
     </a>
-    <button class="menu-btn" aria-label="Menú">☰</button>
   </nav>
 </header>
 
@@ -989,7 +1026,7 @@ img,svg{
       </div>
     </section>
 
-    <section class="how">
+    <section class="how" id="como-comprar">
   <div class="how-heading">
     <span class="how-eyebrow">COMPRA FÁCIL</span>
     <h2 class="section-title">¿Cómo comprar?</h2>
@@ -1006,15 +1043,48 @@ img,svg{
 </main>
 
 <footer class="footer">
-  <div class="footer-inner">
-    <div class="footer-brand">
+  <div class="foot-grid">
+    <div class="foot-brand">
       <img class="footer-logo" src="https://concursossucredito.github.io/-Sucredito-Ecom-/assets/logo-sucredito.png" alt="Sucrédito">
-      <p>Siempre con vos · Día de la Madre</p>
+      <p>Crédito y regalos para sorprender a mamá este Día de la Madre 2026.</p>
     </div>
-    <div class="footer-msg">Feliz Día de la Madre ♡</div>
-    <a href="#productos" class="primary">VER PRODUCTOS</a>
+    <nav class="foot-col" aria-label="Categorías">
+      <h4>Categorías</h4>
+      <a href="#productos" data-foot-cat="celulares"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.2"/><path d="M11 18.5h2"/></svg>Celulares</a>
+      <a href="#productos" data-foot-cat="parlantes"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>Parlantes</a>
+      <a href="#productos" data-foot-cat="smartwatch"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12.5" r="6.5"/><path d="M12 9v3.5l2 1.5"/><path d="M9 3l-2 2M15 3l2 2"/></svg>Smartwatch</a>
+      <a href="#productos" data-foot-cat="audio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3.5" y="14" width="4" height="6" rx="1.5"/><rect x="16.5" y="14" width="4" height="6" rx="1.5"/></svg>Audio</a>
+    </nav>
+    <nav class="foot-col" aria-label="Información">
+      <h4>Información</h4>
+      <a href="#como-comprar">Cómo comprar</a>
+      <a href="#productos" data-foot-cat="todos">Catálogo</a>
+      <a href="#top">Inicio</a>
+    </nav>
+    <div class="foot-col">
+      <h4>Contacto</h4>
+      <a href="#" onclick="openGeneralWhatsApp();return false;" data-track="whatsapp-footer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-4.2A8 8 0 1 1 8.4 18.8z"/><path d="M9.5 9c.3 2.2 2.5 4.4 4.9 5l1.1-1.3-1.7-1-.8.5c-.8-.4-1.5-1.1-1.9-1.9l.5-.8-1-1.7z"/></svg>Consultá por WhatsApp</a>
+      <div class="foot-map">
+        <iframe title="Ubicación de Tarjeta Sucrédito en Google Maps" src="https://maps.google.com/maps?q=-26.828859,-65.2096086&z=16&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+      </div>
+      <a class="foot-map-link" href="https://www.google.com/maps/place/TarjetaSucr%C3%A9dito/@-26.8288542,-65.2121835,17z/data=!3m1!4b1!4m6!3m5!1s0x94225c13f27b7b23:0xf0c3ca5486e7d72e!8m2!3d-26.828859!4d-65.2096086!16s%2Fg%2F11bymwh9x0" target="_blank" rel="noopener">Ver en Google Maps ↗</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 Sucrédito. Todos los derechos reservados.</span>
+    <span>Hecho con <b class="foot-heart">♥</b> para mamá</span>
   </div>
 </footer>
+<script>
+document.querySelectorAll('[data-foot-cat]').forEach(function(a){
+  a.addEventListener('click',function(e){
+    e.preventDefault();
+    var btn=document.querySelector('.category[data-cat="'+a.dataset.footCat+'"]');
+    if(btn) btn.click();
+    var t=document.getElementById('productos'); if(t) t.scrollIntoView({behavior:'smooth'});
+  });
+});
+</script>
 
 <div class="modal" id="modal" aria-hidden="true">
   <div class="modal-box">
