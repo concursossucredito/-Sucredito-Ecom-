@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Regalos para mamá exclusivos para clientes Sucrédito. Celulares, parlantes, smartwatches, audio y más.">
 <title>Sucrédito · Día de la Madre · Catálogo</title>
+<link rel="icon" type="image/png" href="https://concursossucredito.github.io/-Sucredito-Ecom-/assets/logo-sucredito.png">
+<link rel="apple-touch-icon" href="https://concursossucredito.github.io/-Sucredito-Ecom-/assets/logo-sucredito.png">
+<meta name="theme-color" content="#FFEE00">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -90,7 +93,7 @@ a{text-decoration:none;color:inherit}
 .hero{
   max-width:1440px;margin:auto;
   min-height:440px;position:relative;overflow:hidden;
-  background:#fff0f5 url("assets/banner-dia-madre.png") center/cover no-repeat;
+  background:#fff0f5;
 }
 .hero-overlay{
   position:absolute;inset:0;
@@ -433,24 +436,463 @@ a{text-decoration:none;color:inherit}
   .specs div:nth-child(n+3){display:block}
 }
 
+
+/* ===== V6 · ICONOS + BANNER + FAVICON ===== */
+.benefits .ico,
+.step-icon{
+  display:flex;align-items:center;justify-content:center;
+}
+.benefits .ico{
+  width:46px;height:46px;border-radius:14px;
+  background:#fff7c2;color:#14243A;
+  margin-bottom:8px;
+}
+.benefits .ico svg,
+.step-icon svg{
+  width:27px;height:27px;
+  fill:none;stroke:currentColor;stroke-width:2.7;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+.benefit:nth-child(2) .ico{background:#dff9ea;color:#0a9f59}
+.benefit:nth-child(3) .ico{background:#e9edff;color:#4057b8}
+.benefit:nth-child(4) .ico{background:#ffe7f0;color:#e82f72}
+
+.step-icon{
+  width:43px;height:43px;border-radius:50%;
+  background:#fff8bf;color:#14243A;flex:none;
+}
+.step-wa{background:#dff9ea;color:#0a9f59}
+.step-check{background:#ffe7f0;color:#d92d68}
+.step-icon svg{width:23px;height:23px}
+
+.steps .step{
+  position:relative;
+  min-height:62px;
+}
+.steps .step:not(:last-child)::after{
+  content:"";
+  position:absolute;
+  right:-22px;top:31px;width:44px;
+  border-top:2px dashed #d7dbe2;
+}
+.brand-sub{
+  color:#26364d;
+  font-weight:700;
+}
+.footer-brand p{
+  color:#fff !important;
+  font-weight:600;
+}
+.footer-msg{
+  color:#FFEE00 !important;
+}
+
+
+@media(max-width:760px){
+  .steps .step:not(:last-child)::after{
+    display:none;
+  }
+  .step-icon{width:39px;height:39px}
+  .step-icon svg{width:21px;height:21px}
+  .benefits .ico{width:42px;height:42px}
+  .benefits .ico svg{width:24px;height:24px}
+  .brand-sub{display:none}
+}
+
+
+/* ===== V7 · BUSCADOR CON SUGERENCIAS + MOBILE FIRME ===== */
+.search{
+  position:relative;
+}
+.search-suggestions{
+  position:absolute;
+  left:0;
+  right:0;
+  top:calc(100% + 7px);
+  z-index:5000;
+  display:none;
+  background:#fff;
+  border:1px solid #e2e5ea;
+  border-radius:15px;
+  box-shadow:0 15px 35px rgba(20,36,58,.16);
+  overflow:hidden;
+  max-height:390px;
+  overflow-y:auto;
+}
+.search-suggestions.show{display:block}
+.search-suggestion{
+  width:100%;
+  border:0;
+  border-bottom:1px solid #edf0f3;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:10px 12px;
+  text-align:left;
+  cursor:pointer;
+}
+.search-suggestion:last-child{border-bottom:0}
+.search-suggestion:hover,
+.search-suggestion:active{background:#fffbe0}
+.search-suggestion img{
+  width:48px;
+  height:48px;
+  object-fit:contain;
+  border-radius:10px;
+  background:#f5f6f7;
+  flex:none;
+}
+.suggestion-info{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  min-width:0;
+}
+.suggestion-info strong{
+  color:#14243A;
+  font-size:10px;
+  letter-spacing:.4px;
+}
+.suggestion-info span{
+  color:#14243A;
+  font-size:14px;
+  font-weight:800;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.suggestion-arrow{
+  margin-left:auto;
+  color:#a0a7b0;
+  font-size:25px;
+  line-height:1;
+}
+.suggestion-empty{
+  padding:18px;
+  color:#667085;
+  font-size:13px;
+  text-align:center;
+  font-weight:700;
+}
+
+html,body{
+  max-width:100%;
+  overflow-x:hidden;
+}
+
+img,svg{
+  max-width:100%;
+}
+
+@media(max-width:760px){
+  html,body{
+    width:100%;
+    overflow-x:hidden;
+    overscroll-behavior-x:none;
+  }
+  body{
+    position:relative;
+    touch-action:pan-y;
+  }
+  .header{
+    width:100%;
+    max-width:100vw;
+  }
+  .nav{
+    width:100%;
+    max-width:100%;
+    box-sizing:border-box;
+    overflow:visible;
+  }
+  .search{
+    min-width:0;
+  }
+  .search-suggestions{
+    position:absolute;
+    left:0;
+    right:0;
+    width:100%;
+    max-height:330px;
+  }
+  .hero,
+  .container,
+  .section,
+  .info-strip,
+  .how,
+  .footer{
+    max-width:100%;
+    box-sizing:border-box;
+  }
+  .hero{
+    width:100%;
+    overflow:hidden;
+  }
+  .products{
+    width:100%;
+    min-width:0;
+  }
+  .card{
+    min-width:0;
+    overflow:hidden;
+  }
+  .product-name,
+  .brand-name,
+  .installments,
+  .specs,
+  .buy{
+    overflow-wrap:anywhere;
+  }
+  .categories{
+    max-width:100%;
+    padding-left:1px;
+    padding-right:1px;
+    overscroll-behavior-x:contain;
+  }
+  .category{
+    flex-shrink:0;
+  }
+  .modal{
+    width:100%;
+    max-width:100%;
+    box-sizing:border-box;
+  }
+}
+
+
+/* ===== V8 · HOW TO + ROBUST SEARCH ===== */
+.how{
+  background:#fff;
+  border:1px solid #e7e9ed;
+  box-shadow:0 18px 45px rgba(20,36,58,.08);
+  padding:34px;
+}
+.how-heading{
+  max-width:650px;
+  margin-bottom:27px;
+}
+.how-eyebrow{
+  display:inline-block;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:1.5px;
+  color:#d92d68;
+  margin-bottom:8px;
+}
+.how-heading .section-title{
+  margin-bottom:7px;
+}
+.how-heading p{
+  margin:0;
+  color:#667085;
+  font-size:14px;
+  line-height:1.5;
+}
+.steps{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  margin-top:0;
+}
+.steps .step{
+  min-height:190px;
+  padding:20px;
+  border:1px solid #e8ebef;
+  border-radius:18px;
+  background:linear-gradient(145deg,#fff 0%,#fafbfc 100%);
+  box-shadow:0 6px 20px rgba(20,36,58,.05);
+  transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.steps .step:hover{
+  transform:translateY(-3px);
+  box-shadow:0 13px 28px rgba(20,36,58,.09);
+  border-color:#dadfe6;
+}
+.step-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:20px;
+}
+.step-num{
+  width:38px;height:38px;
+  border-radius:11px;
+  background:#14243A;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.5px;
+}
+.step-icon{
+  width:52px;height:52px;
+  border-radius:15px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#fff6bd;
+  color:#14243A;
+}
+.step-icon svg{
+  width:28px;height:28px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.6;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.step-wa{background:#dff8e9;color:#0a9f59}
+.step-check{background:#ffe6ef;color:#d92d68}
+.step-copy{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.step-copy strong{
+  font-size:18px;
+  color:#14243A;
+}
+.step-copy span{
+  font-size:12px;
+  color:#667085;
+  line-height:1.45;
+}
+
+/* Search dropdown must sit above hero/content and be clickable. */
+.header,.nav,.search{
+  position:relative;
+}
+.search{
+  z-index:6000;
+}
+.search-suggestions{
+  z-index:99999 !important;
+  pointer-events:auto;
+  visibility:hidden;
+  opacity:0;
+  transform:translateY(-4px);
+  transition:opacity .12s ease, transform .12s ease;
+}
+.search-suggestions.show{
+  display:block !important;
+  visibility:visible;
+  opacity:1;
+  transform:translateY(0);
+}
+.search-suggestion{
+  cursor:pointer !important;
+  position:relative;
+  z-index:2;
+}
+.search-suggestion:hover{
+  background:#fff9d6;
+}
+.search-suggestion:focus{
+  outline:2px solid #14243A;
+  outline-offset:-2px;
+  background:#fff9d6;
+}
+
+/* The nav must not clip the dropdown. */
+.nav{overflow:visible !important}
+.header{overflow:visible !important}
+
+@media(max-width:760px){
+  .how{
+    padding:22px 14px;
+    border-radius:18px;
+  }
+  .how-heading{
+    margin-bottom:17px;
+  }
+  .how-heading .section-title{
+    font-size:23px;
+  }
+  .how-heading p{
+    font-size:12px;
+  }
+  .steps{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+  .steps .step{
+    min-height:auto;
+    padding:14px;
+    display:grid;
+    grid-template-columns:1fr;
+  }
+  .step-top{
+    margin-bottom:10px;
+  }
+  .step-icon{
+    width:44px;height:44px;border-radius:13px;
+  }
+  .step-icon svg{
+    width:24px;height:24px;
+  }
+  .step-copy strong{font-size:16px}
+  .step-copy span{font-size:11px}
+  .search-suggestions{
+    position:absolute !important;
+    top:calc(100% + 6px) !important;
+    left:0 !important;
+    right:0 !important;
+    width:100% !important;
+    max-width:none !important;
+    max-height:300px;
+  }
+}
+
+
+/* ===== V9 · HERO BANNER (foto liviana + fondo CSS que siempre se ve) ===== */
+.hero{
+  background-color:#fff0f5;
+  background-image:
+    url("assets/hero-dia-madre.webp"),
+    radial-gradient(circle at 85% 20%,#ffd3e3 0,rgba(255,211,227,0) 45%),
+    linear-gradient(135deg,#fff7fa 0%,#ffe6ef 100%);
+  background-repeat:no-repeat;
+  background-size:auto 100%,auto,auto;
+  background-position:right center,center,center;
+  min-height:440px;
+}
+.hero-overlay{
+  background:linear-gradient(90deg,rgba(255,247,250,.96) 0%,rgba(255,247,250,.85) 38%,rgba(255,247,250,0) 62%);
+}
+@media(max-width:1100px){
+  .hero{background-size:auto 88%,auto,auto}
+}
+@media(max-width:760px){
+  .hero{
+    min-height:620px;
+    background-size:auto 46%,auto,auto;
+    background-position:right bottom,center,center;
+  }
+  .hero-overlay{
+    background:linear-gradient(180deg,rgba(255,247,250,.97) 0%,rgba(255,247,250,.95) 50%,rgba(255,247,250,0) 64%);
+  }
+}
 </style>
 </head>
 
 <body>
 <div class="intro-logo" id="introLogo" aria-hidden="true">
-  <img src="assets/logo-sucredito.png" alt="">
+  <img src="https://concursossucredito.github.io/-Sucredito-Ecom-/assets/logo-sucredito.png" alt="">
 </div>
 
 <header class="header">
   <nav class="nav">
     <a class="brand" href="#" aria-label="Sucrédito">
-      <img class="brand-logo" src="assets/logo-sucredito.png" alt="Sucrédito">
-      <span class="brand-sub">Siempre con vos</span>
+      <img class="brand-logo" src="https://concursossucredito.github.io/-Sucredito-Ecom-/assets/logo-sucredito.png" alt="Sucrédito">
+      <span class="brand-sub"></span>
     </a>
 
     <div class="search">
-      <input id="searchInput" type="search" placeholder="Buscá un producto..." autocomplete="off">
-      <button aria-label="Buscar">⌕</button>
+      <input id="searchInput" type="search" placeholder="Buscá un producto..." autocomplete="off" aria-autocomplete="list" aria-controls="searchSuggestions">
+      <button type="button" aria-label="Buscar">⌕</button>
+      <div id="searchSuggestions" class="search-suggestions" role="listbox" aria-label="Sugerencias de productos"></div>
     </div>
 
     <a class="whatsapp-top" href="#" onclick="openGeneralWhatsApp();return false;" data-track="whatsapp-general">
@@ -515,28 +957,98 @@ a{text-decoration:none;color:inherit}
         </div>
       </div>
       <div class="benefits">
-        <div class="benefit"><div class="ico">♧</div><strong>Atención personalizada</strong></div>
-        <div class="benefit"><div class="ico">◉</div><strong>Compra por WhatsApp</strong></div>
-        <div class="benefit"><div class="ico">▣</div><strong>Opciones de financiación</strong></div>
-        <div class="benefit"><div class="ico">♡</div><strong>Productos seleccionados</strong></div>
+        <div class="benefit">
+          <div class="ico ico-headset" aria-hidden="true">
+            <svg viewBox="0 0 48 48"><path d="M8 26a16 16 0 0 1 32 0"/><rect x="6" y="24" width="9" height="14" rx="4"/><rect x="33" y="24" width="9" height="14" rx="4"/><path d="M15 38c2 4 6 5 11 5h3"/></svg>
+          </div>
+          <strong>Atención personalizada</strong>
+        </div>
+        <div class="benefit">
+          <div class="ico ico-wa" aria-hidden="true">
+            <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="17"/><path d="M17 38l-2 6 6-3"/><path d="M17 18c1-2 2-3 3-3 1 0 2 1 3 4 .5 1-.2 2-1 3l-1 1c2 3 4 5 7 6l1-1c1-1 2-1 3-.5 2 1 3 2 3 3 0 2-2 4-5 4-7 0-15-7-15-14 0-1 .5-2 1-3Z"/></svg>
+          </div>
+          <strong>Compra por WhatsApp</strong>
+        </div>
+        <div class="benefit">
+          <div class="ico ico-card" aria-hidden="true">
+            <svg viewBox="0 0 48 48"><rect x="6" y="10" width="36" height="28" rx="5"/><path d="M6 19h36M12 30h10"/></svg>
+          </div>
+          <strong>Opciones de financiación</strong>
+        </div>
+        <div class="benefit">
+          <div class="ico ico-heart" aria-hidden="true">
+            <svg viewBox="0 0 48 48"><path d="M24 40S7 30 7 18c0-6 4-10 9-10 4 0 7 2 8 6 1-4 4-6 8-6 5 0 9 4 9 10 0 12-17 22-17 22Z"/></svg>
+          </div>
+          <strong>Productos seleccionados</strong>
+        </div>
       </div>
     </section>
 
     <section class="how">
-      <h2 class="section-title">¿Cómo comprar?</h2>
-      <div class="steps">
-        <div class="step"><span class="step-num">1</span><div><strong>Elegí</strong><span>el producto que te guste.</span></div></div>
-        <div class="step"><span class="step-num">2</span><div><strong>Consultá</strong><span>por WhatsApp con nuestros asesores.</span></div></div>
-        <div class="step"><span class="step-num">3</span><div><strong>Comprá</strong><span>con tu Sucrédito.</span></div></div>
+  <div class="how-heading">
+    <span class="how-eyebrow">COMPRA FÁCIL</span>
+    <h2 class="section-title">¿Cómo comprar?</h2>
+    <p>Elegí tu regalo y hacé tu consulta. Nosotros te acompañamos en todo el proceso.</p>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-top">
+        <span class="step-num">01</span>
+        <span class="step-icon step-search" aria-hidden="true">
+          <svg viewBox="0 0 48 48">
+            <circle cx="21" cy="21" r="13"></circle>
+            <path d="m31 31 10 10"></path>
+          </svg>
+        </span>
       </div>
-    </section>
+      <div class="step-copy">
+        <strong>Elegí</strong>
+        <span>Encontrá el producto que te guste y mirá todos sus detalles.</span>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-top">
+        <span class="step-num">02</span>
+        <span class="step-icon step-wa" aria-hidden="true">
+          <svg viewBox="0 0 48 48">
+            <circle cx="24" cy="23" r="16"></circle>
+            <path d="m15 39 2-6"></path>
+            <path d="M17 18c1-2 2-3 3-3 1 0 2 1 3 4 .5 1-.2 2-1 3l-1 1c2 3 4 5 7 6l1-1c1-1 2-1 3-.5 2 1 3 2 3 3 0 2-2 4-5 4-7 0-15-7-15-14 0-1 .5-2 1-3Z"></path>
+          </svg>
+        </span>
+      </div>
+      <div class="step-copy">
+        <strong>Consultá</strong>
+        <span>Escribinos por WhatsApp y recibí atención personalizada.</span>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-top">
+        <span class="step-num">03</span>
+        <span class="step-icon step-check" aria-hidden="true">
+          <svg viewBox="0 0 48 48">
+            <circle cx="24" cy="24" r="17"></circle>
+            <path d="m15 24 6 6 12-13"></path>
+          </svg>
+        </span>
+      </div>
+      <div class="step-copy">
+        <strong>Comprá</strong>
+        <span>Coordiná tu compra y disfrutá tu producto con tu Sucrédito.</span>
+      </div>
+    </div>
+  </div>
+</section>
   </div>
 </main>
 
 <footer class="footer">
   <div class="footer-inner">
     <div class="footer-brand">
-      <img class="footer-logo" src="assets/logo-sucredito.png" alt="Sucrédito">
+      <img class="footer-logo" src="https://concursossucredito.github.io/-Sucredito-Ecom-/assets/logo-sucredito.png" alt="Sucrédito">
       <p>Siempre con vos · Día de la Madre</p>
     </div>
     <div class="footer-msg">Feliz Día de la Madre ♡</div>
@@ -618,7 +1130,7 @@ a{text-decoration:none;color:inherit}
   No habrá que rediseñar las tarjetas ni la ficha.
 */
 
-const WHATSAPP = "5493810000000"; // <-- REEMPLAZAR POR EL WHATSAPP REAL
+const WHATSAPP = "3815844978"; // <-- REEMPLAZAR POR EL WHATSAPP REAL
 
 window.addEventListener("load", () => {
   setTimeout(() => {
@@ -728,12 +1240,22 @@ function trackEvent(category, action, name, value) {
   } catch(e) {}
 }
 
+function normalizarBusqueda(texto){
+  return String(texto || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\\u0300-\\u036f]/g, "")
+    .trim();
+}
+
 function renderProductos(){
-  const q = busqueda.trim().toLowerCase();
+  const q = normalizarBusqueda(busqueda);
 
   const lista = productos.filter(p => {
     const categoriaOk = filtroActual === "todos" || p.categoria === filtroActual;
-    const texto = `${p.marca} ${p.nombre} ${p.categoria} ${p.specs.join(" ")}`.toLowerCase();
+    const texto = normalizarBusqueda(
+      `${p.marca} ${p.nombre} ${p.categoria} ${p.specs.join(" ")}`
+    );
     return categoriaOk && (!q || texto.includes(q));
   });
 
@@ -779,10 +1301,125 @@ document.querySelectorAll(".category").forEach(btn => {
   });
 });
 
-searchInput.addEventListener("input", e => {
-  busqueda = e.target.value;
-  if (busqueda.trim().length >= 2) trackEvent("Búsqueda", "buscar", busqueda.trim());
+const suggestionsEl = document.getElementById("searchSuggestions");
+
+function mostrarSugerencias(){
+  if (!suggestionsEl || !searchInput) return;
+
+  const q = normalizarBusqueda(searchInput.value);
+
+  if (q.length < 1) {
+    suggestionsEl.innerHTML = "";
+    suggestionsEl.classList.remove("show");
+    return;
+  }
+
+  const coincidencias = productos.filter(p => {
+    const texto = normalizarBusqueda(
+      `${p.marca} ${p.nombre} ${p.categoria} ${p.specs.join(" ")}`
+    );
+    return texto.includes(q);
+  }).slice(0, 6);
+
+  if (!coincidencias.length) {
+    suggestionsEl.innerHTML = `<div class="suggestion-empty">No encontramos productos para “${searchInput.value}”.</div>`;
+    suggestionsEl.classList.add("show");
+    return;
+  }
+
+  suggestionsEl.innerHTML = coincidencias.map(p => `
+    <div class="search-suggestion" role="option" tabindex="0" data-id="${p.id}">
+      <img src="${p.imagen}" alt="" loading="lazy">
+      <span class="suggestion-info">
+        <strong>${p.marca}</strong>
+        <span>${p.nombre}</span>
+      </span>
+      <span class="suggestion-arrow">›</span>
+    </div>
+  `).join("");
+
+  suggestionsEl.classList.add("show");
+
+  suggestionsEl.querySelectorAll(".search-suggestion").forEach(item => {
+    const seleccionar = () => {
+      const id = item.dataset.id;
+      const producto = productos.find(p => p.id === id);
+      if (!producto) return;
+
+      searchInput.value = `${producto.marca} ${producto.nombre}`;
+      busqueda = searchInput.value;
+      suggestionsEl.classList.remove("show");
+
+      trackEvent("Búsqueda", "selección_sugerencia", `${producto.marca} ${producto.nombre}`);
+      renderProductos();
+
+      const productosSection = document.getElementById("productos");
+      if (productosSection) {
+        productosSection.scrollIntoView({behavior:"smooth", block:"start"});
+      }
+
+      setTimeout(() => openProduct(id), 350);
+    };
+
+    item.addEventListener("click", seleccionar);
+    item.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        seleccionar();
+      }
+    });
+  });
+}
+
+function ejecutarBusqueda(){
+  busqueda = searchInput.value;
   renderProductos();
+
+  if (busqueda.trim().length >= 2) {
+    trackEvent("Búsqueda", "buscar", busqueda.trim());
+  }
+
+  const productosSection = document.getElementById("productos");
+  if (productosSection && busqueda.trim()) {
+    productosSection.scrollIntoView({behavior:"smooth", block:"start"});
+  }
+}
+
+searchInput.addEventListener("input", () => {
+  busqueda = searchInput.value;
+  renderProductos();
+  mostrarSugerencias();
+});
+
+searchInput.addEventListener("focus", () => {
+  mostrarSugerencias();
+});
+
+searchInput.addEventListener("keydown", e => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    ejecutarBusqueda();
+    suggestionsEl.classList.remove("show");
+  }
+
+  if (e.key === "Escape") {
+    suggestionsEl.classList.remove("show");
+  }
+});
+
+const searchButton = document.querySelector(".search button");
+if (searchButton) {
+  searchButton.addEventListener("click", e => {
+    e.preventDefault();
+    ejecutarBusqueda();
+    suggestionsEl.classList.remove("show");
+  });
+}
+
+document.addEventListener("click", e => {
+  if (!e.target.closest(".search")) {
+    suggestionsEl.classList.remove("show");
+  }
 });
 
 clearFilter.addEventListener("click", resetCatalogo);
@@ -791,6 +1428,25 @@ function resetCatalogo(){
   filtroActual = "todos";
   busqueda = "";
   searchInput.value = "";
+
+  if (suggestionsEl) {
+    suggestionsEl.classList.remove("show");
+    suggestionsEl.innerHTML = "";
+  }
+
+  document.querySelectorAll(".category").forEach(x => x.classList.remove("active"));
+  document.querySelector('.category[data-cat="todos"]').classList.add("active");
+  renderProductos();
+}
+
+function resetCatalogo(){
+  filtroActual = "todos";
+  busqueda = "";
+  searchInput.value = "";
+  if (suggestionsEl) {
+    suggestionsEl.classList.remove("show");
+    suggestionsEl.innerHTML = "";
+  }
   document.querySelectorAll(".category").forEach(x => x.classList.remove("active"));
   document.querySelector('.category[data-cat="todos"]').classList.add("active");
   renderProductos();
