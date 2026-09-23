@@ -931,6 +931,20 @@ html,body{overflow-x:clip !important}
   .search-suggestion{padding:10px 12px}
   #productos{scroll-margin-top:118px}
 }
+
+/* ===== V9 · BOTÓN X DEL BUSCADOR ===== */
+.search input{padding-right:98px !important}
+.search .search-clear{
+  display:none;position:absolute;right:50px;top:50%;transform:translateY(-50%);
+  width:32px;height:32px;padding:0;border:0;border-radius:50%;
+  background:#eceef1;color:#444;font-size:14px;line-height:1;cursor:pointer;
+  align-items:center;justify-content:center;
+}
+.search.has-text .search-clear{display:flex}
+@media(max-width:760px){
+  .search input{padding-right:92px !important}
+  .search .search-clear{right:46px;width:30px;height:30px}
+}
 </style>
 </head>
 
@@ -947,6 +961,7 @@ html,body{overflow-x:clip !important}
 
     <div class="search">
       <input id="searchInput" type="search" placeholder="Buscá un producto..." autocomplete="off" aria-autocomplete="list" aria-controls="searchSuggestions">
+      <button type="button" class="search-clear" aria-label="Borrar búsqueda">✕</button>
       <button type="button" aria-label="Buscar">⌕</button>
       <div id="searchSuggestions" class="search-suggestions" role="listbox" aria-label="Sugerencias de productos"></div>
     </div>
@@ -1059,7 +1074,7 @@ html,body{overflow-x:clip !important}
   <div class="foot-grid">
     <div class="foot-brand">
       <img class="footer-logo" src="https://concursossucredito.github.io/-Sucredito-Ecom-/assets/logo-sucredito.png" alt="Sucrédito">
-      <p>Crédito y regalos para sorprender a mamá este Día de la Madre 2026.</p>
+      <p>Regalos para sorprender a mamá este Día de la Madre 2026.</p>
     </div>
     <nav class="foot-col" aria-label="Categorías">
       <h4>Categorías</h4>
@@ -1603,6 +1618,24 @@ No poner contraseñas reales en este index.html.
   function unlock(){ meta.setAttribute('content', base); window.scrollTo(window.scrollX, window.scrollY); }
   input.addEventListener('focus', lock);
   input.addEventListener('blur', function(){ setTimeout(unlock,150); });
+})();
+</script>
+
+<script>
+/* Botón X para borrar lo escrito en el buscador */
+(function(){
+  var input=document.getElementById('searchInput'), box=input&&input.closest('.search');
+  var x=box&&box.querySelector('.search-clear');
+  if(!input||!x) return;
+  function sync(){ box.classList.toggle('has-text', input.value.length>0); }
+  input.addEventListener('input', sync);
+  x.addEventListener('mousedown', function(e){ e.preventDefault(); });
+  x.addEventListener('click', function(){
+    input.value='';
+    input.dispatchEvent(new Event('input',{bubbles:true}));
+    sync(); input.focus();
+  });
+  sync();
 })();
 </script>
 </body>
