@@ -1638,5 +1638,22 @@ No poner contraseñas reales en este index.html.
   sync();
 })();
 </script>
+
+<script>
+/* Catálogo desde la base de datos (Supabase). Si falla o no hay datos, se usa la lista incluida arriba. */
+(function(){
+  var SB_URL="https://edrsmodtaalisaiqpeoa.supabase.co", SB_KEY="sb_publishable_UvLROmFBK3JzgyqoTPFLbQ_OlAo3yqc";
+  if(SB_URL.indexOf("PEGAR")===0) return;
+  var pts=function(n){return String(n).replace(/\B(?=(\d{3})+(?!\d))/g,".");};
+  fetch(SB_URL+"/rest/v1/productos?select=*&activo=eq.true&stock=gt.0&order=nombre",{headers:{apikey:SB_KEY,Authorization:"Bearer "+SB_KEY}})
+  .then(function(r){return r.json();}).then(function(rows){
+    if(!Array.isArray(rows)||!rows.length) return;
+    var lista=rows.map(function(p){return {id:p.id,categoria:p.categoria,marca:p.marca,nombre:p.nombre,precio:"$ "+pts(p.precio),
+      cuotas:/^\d+$/.test(p.cuotas)?"en "+p.cuotas+" cuotas":p.cuotas,badge:p.badge||undefined,imagen:p.imagen,specs:p.specs||[]};});
+    productos.splice.apply(productos,[0,productos.length].concat(lista));
+    renderProductos();
+  }).catch(function(){});
+})();
+</script>
 </body>
 </html>
