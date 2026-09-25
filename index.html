@@ -999,11 +999,6 @@ html,body{overflow-x:clip !important}
           <strong style="font-size:20px">Elegí tu regalo</strong>
           <span>Ver todos los productos</span>
         </button>
-        <button class="category" data-cat="celulares"><span class="category-icon">📱</span><strong>Celulares</strong></button>
-        <button class="category" data-cat="parlantes"><span class="category-icon">🔊</span><strong>Parlantes</strong></button>
-        <button class="category" data-cat="smartwatch"><span class="category-icon">⌚</span><strong>Smartwatch</strong></button>
-        <button class="category" data-cat="audio"><span class="category-icon">🎧</span><strong>Audio</strong></button>
-        <button class="category" data-cat="todos"><span class="category-icon">🎁</span><strong>Todos los regalos</strong></button>
       </div>
     </section>
 
@@ -1076,13 +1071,7 @@ html,body{overflow-x:clip !important}
       <img class="footer-logo" src="https://concursossucredito.github.io/-Sucredito-Ecom-/assets/logo-sucredito.png" alt="Sucrédito">
       <p>Regalos para sorprender a mamá este Día de la Madre 2026.</p>
     </div>
-    <nav class="foot-col" aria-label="Categorías">
-      <h4>Categorías</h4>
-      <a href="#productos" data-foot-cat="celulares"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.2"/><path d="M11 18.5h2"/></svg>Celulares</a>
-      <a href="#productos" data-foot-cat="parlantes"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>Parlantes</a>
-      <a href="#productos" data-foot-cat="smartwatch"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12.5" r="6.5"/><path d="M12 9v3.5l2 1.5"/><path d="M9 3l-2 2M15 3l2 2"/></svg>Smartwatch</a>
-      <a href="#productos" data-foot-cat="audio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3.5" y="14" width="4" height="6" rx="1.5"/><rect x="16.5" y="14" width="4" height="6" rx="1.5"/></svg>Audio</a>
-    </nav>
+    <nav class="foot-col" aria-label="Categorías"><h4>Categorías</h4><div id="footerCategories"></div></nav>
     <nav class="foot-col" aria-label="Información">
       <h4>Información</h4>
       <a href="#como-comprar">Cómo comprar</a>
@@ -1123,7 +1112,7 @@ document.querySelectorAll('[data-foot-cat]').forEach(function(a){
         <div id="modalBrand" class="brand-name"></div>
         <h2 id="modalName"></h2>
         <div id="modalSpecs" class="modal-specs"></div>
-        <div class="price-label">Precio de referencia</div>
+        <div class="price-label">Financiación</div>
         <div id="modalPrice" class="modal-price"></div>
         <div id="modalInstallments" class="installments"></div>
         <button id="modalBuy" class="wa-large"><span class="wa-icon wa-btn-icon" aria-hidden="true">
@@ -1197,89 +1186,7 @@ window.addEventListener("load", () => {
   }, 1900);
 }); // <-- REEMPLAZAR POR EL WHATSAPP REAL
 
-const productos = [
-  {
-    id:"samsung-a55",
-    categoria:"celulares",
-    marca:"SAMSUNG",
-    nombre:"Galaxy A55 5G",
-    precio:"$ 489.999",
-    cuotas:"en 12 cuotas",
-    badge:"Más vendido",
-    imagen:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=900&q=85",
-    specs:["📱 Pantalla 6.6”","💾 128 GB | 8 GB RAM","📸 Cámara 50 MP","🔋 Batería 5.000 mAh"]
-  },
-  {
-    id:"jbl-flip",
-    categoria:"parlantes",
-    marca:"JBL",
-    nombre:"Parlante Flip 6",
-    precio:"$ 119.999",
-    cuotas:"en 6 cuotas",
-    imagen:"https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=900&q=85",
-    specs:["♬ Bluetooth 5.1","🔋 Hasta 12 hs de batería","💧 Resistente al agua","🔊 Sonido JBL Original Pro"]
-  },
-  {
-    id:"redmi-watch",
-    categoria:"smartwatch",
-    marca:"XIAOMI",
-    nombre:"Redmi Watch 4",
-    precio:"$ 89.999",
-    cuotas:"en 6 cuotas",
-    imagen:"https://images.unsplash.com/photo-1544117519-31a4b719223d?auto=format&fit=crop&w=900&q=85",
-    specs:["⌚ Pantalla AMOLED 1.97”","📍 GPS integrado","♡ Monitoreo de salud","🔋 Hasta 10 días de batería"]
-  },
-  {
-    id:"galaxy-buds",
-    categoria:"audio",
-    marca:"SAMSUNG",
-    nombre:"Galaxy Buds FE",
-    precio:"$ 99.999",
-    cuotas:"en 6 cuotas",
-    imagen:"https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=900&q=85",
-    specs:["🎧 Sonido premium","🔇 Cancelación de ruido","🔋 Hasta 30 hs de batería","💧 Resistentes al agua"]
-  },
-  {
-    id:"jbl-headphones",
-    categoria:"audio",
-    marca:"JBL",
-    nombre:"Tune 770NC",
-    precio:"$ 139.999",
-    cuotas:"en 6 cuotas",
-    imagen:"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=900&q=85",
-    specs:["🎧 Cancelación de ruido","♬ Bluetooth","🔋 Gran autonomía","🎙️ Micrófono integrado"]
-  },
-  {
-    id:"motorola-edge",
-    categoria:"celulares",
-    marca:"MOTOROLA",
-    nombre:"Edge 50 Fusion",
-    precio:"$ 399.999",
-    cuotas:"en 12 cuotas",
-    imagen:"https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=900&q=85",
-    specs:["📱 Pantalla 6.7”","💾 256 GB","📸 Cámara 50 MP","⚡ Carga rápida"]
-  },
-  {
-    id:"speaker-go",
-    categoria:"parlantes",
-    marca:"JBL",
-    nombre:"Go 4",
-    precio:"$ 69.999",
-    cuotas:"en 6 cuotas",
-    imagen:"https://images.unsplash.com/photo-1589003077984-894e133dabab?auto=format&fit=crop&w=900&q=85",
-    specs:["🔊 Sonido JBL","🔋 Hasta 7 hs","💧 Resistente al agua","🎒 Compacto y portátil"]
-  },
-  {
-    id:"watch-active",
-    categoria:"smartwatch",
-    marca:"XIAOMI",
-    nombre:"Watch S3",
-    precio:"$ 129.999",
-    cuotas:"en 6 cuotas",
-    imagen:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=85",
-    specs:["⌚ Pantalla AMOLED","📍 GPS","♡ Seguimiento de actividad","🔋 Gran autonomía"]
-  }
-];
+let productos = [];
 
 let filtroActual = "todos";
 let busqueda = "";
@@ -1334,9 +1241,8 @@ function renderProductos(){
         <div class="brand-name">${p.marca}</div>
         <div class="product-name">${p.nombre}</div>
         <div class="specs">${p.specs.map(s => `<div>${s}</div>`).join("")}</div>
-        <div class="price-label">Desde</div>
-        <div class="price">${p.precio}</div>
-        <div class="installments">${p.cuotas}</div>
+        <div class="price-label">Financiación</div>
+        <div class="price">${p.cuotasTexto || "Consultar"}</div>
         <button class="buy" onclick="event.stopPropagation();openProduct('${p.id}')"><span class="wa-icon wa-btn-icon" aria-hidden="true">
 <svg viewBox="0 0 32 32" role="img" focusable="false">
   <circle cx="16" cy="16" r="15" fill="#25D366"/>
@@ -1347,17 +1253,6 @@ function renderProductos(){
     </article>
   `).join("");
 }
-
-document.querySelectorAll(".category").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".category").forEach(x => x.classList.remove("active"));
-    btn.classList.add("active");
-    filtroActual = btn.dataset.cat;
-    trackEvent("Catálogo", "categoría", btn.dataset.cat);
-    renderProductos();
-    document.getElementById("productos").scrollIntoView({behavior:"smooth",block:"start"});
-  });
-});
 
 const suggestionsEl = document.getElementById("searchSuggestions");
 
@@ -1502,18 +1397,6 @@ function resetCatalogo(){
   renderProductos();
 }
 
-function resetCatalogo(){
-  filtroActual = "todos";
-  busqueda = "";
-  searchInput.value = "";
-  if (suggestionsEl) {
-    suggestionsEl.classList.remove("show");
-    suggestionsEl.innerHTML = "";
-  }
-  document.querySelectorAll(".category").forEach(x => x.classList.remove("active"));
-  document.querySelector('.category[data-cat="todos"]').classList.add("active");
-  renderProductos();
-}
 
 function openProduct(id){
   const p = productos.find(x => x.id === id);
@@ -1524,8 +1407,8 @@ function openProduct(id){
   document.getElementById("modalImg").alt = `${p.marca} ${p.nombre}`;
   document.getElementById("modalBrand").textContent = p.marca;
   document.getElementById("modalName").textContent = p.nombre;
-  document.getElementById("modalPrice").textContent = p.precio;
-  document.getElementById("modalInstallments").textContent = p.cuotas;
+  document.getElementById("modalPrice").textContent = p.cuotasTexto || "Consultar por WhatsApp";
+  document.getElementById("modalInstallments").textContent = p.precio ? "Precio de referencia: $ " + Number(p.precio).toLocaleString("es-AR") : "";
   document.getElementById("modalSpecs").innerHTML = p.specs.map(s => `<div>${s}</div>`).join("");
 
   document.getElementById("modalBuy").onclick = () => {
@@ -1640,19 +1523,35 @@ No poner contraseñas reales en este index.html.
 </script>
 
 <script>
-/* Catálogo desde la base de datos (Supabase). Si falla o no hay datos, se usa la lista incluida arriba. */
+/* Catálogo público: SOLO lee productos y categorías publicados desde Supabase. */
 (function(){
   var SB_URL="https://edrsmodtaalisaiqpeoa.supabase.co", SB_KEY="sb_publishable_UvLROmFBK3JzgyqoTPFLbQ_OlAo3yqc";
-  if(SB_URL.indexOf("PEGAR")===0) return;
-  var pts=function(n){return String(n).replace(/\B(?=(\d{3})+(?!\d))/g,".");};
-  fetch(SB_URL+"/rest/v1/productos?select=*&activo=eq.true&stock=gt.0&order=nombre",{headers:{apikey:SB_KEY,Authorization:"Bearer "+SB_KEY}})
-  .then(function(r){return r.json();}).then(function(rows){
-    if(!Array.isArray(rows)||!rows.length) return;
-    var lista=rows.map(function(p){return {id:p.id,categoria:p.categoria,marca:p.marca,nombre:p.nombre,precio:"$ "+pts(p.precio),
-      cuotas:/^\d+$/.test(p.cuotas)?"en "+p.cuotas+" cuotas":p.cuotas,badge:p.badge||undefined,imagen:p.imagen,specs:p.specs||[]};});
-    productos.splice.apply(productos,[0,productos.length].concat(lista));
+  var pts=function(n){return Number(n||0).toLocaleString("es-AR");};
+  var slug=function(x){return String(x||"").toLowerCase();};
+  var escHtml=function(x){return String(x??"").replace(/[&<>"']/g,function(c){return ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]);});};
+  Promise.all([
+    fetch(SB_URL+"/rest/v1/productos?select=*&activo=eq.true&stock=gt.0&order=nombre",{headers:{apikey:SB_KEY,Authorization:"Bearer "+SB_KEY}}).then(function(r){if(!r.ok)throw Error("No se pudo cargar el catálogo");return r.json();}),
+    fetch(SB_URL+"/rest/v1/categorias?select=*&activo=eq.true&order=orden&nombre",{headers:{apikey:SB_KEY,Authorization:"Bearer "+SB_KEY}}).then(function(r){if(!r.ok)throw Error("No se pudieron cargar las categorías");return r.json();})
+  ]).then(function(result){
+    var rows=result[0]||[], cats=result[1]||[];
+    productos=rows.map(function(p){
+      var specs=p.specs||[];
+      return {id:p.id,categoria:p.categoria,marca:p.marca,nombre:p.nombre,precio:p.precio||0,cuotas:p.cuotas||0,valor_cuota:p.valor_cuota||0,
+        cuotasTexto:(p.cuotas&&p.valor_cuota)?(p.cuotas+" cuotas de $ "+pts(p.valor_cuota)):(p.cuotas?(p.cuotas+" cuotas"):"Consultar"),
+        badge:p.badge||undefined,imagen:p.imagen||"",specs:specs};
+    });
+    var box=document.getElementById("categories");
+    if(box){box.insertAdjacentHTML("beforeend",cats.map(function(c){return '<button class="category" data-cat="'+escHtml(c.id)+'"><span class="category-icon">🎁</span><strong>'+escHtml(c.nombre)+'</strong></button>';}).join(""));}
+    var footer=document.getElementById("footerCategories");
+    if(footer){footer.innerHTML=cats.map(function(c){return '<a href="#productos" data-foot-cat="'+escHtml(c.id)+'">'+escHtml(c.nombre)+'</a>';}).join("");}
+    document.querySelectorAll(".category").forEach(function(btn){btn.addEventListener("click",function(){document.querySelectorAll(".category").forEach(function(x){x.classList.remove("active")});btn.classList.add("active");filtroActual=btn.dataset.cat;trackEvent("Catálogo","categoría",btn.dataset.cat);renderProductos();document.getElementById("productos").scrollIntoView({behavior:"smooth",block:"start"});});});
+    document.querySelectorAll("[data-foot-cat]").forEach(function(a){a.addEventListener("click",function(e){e.preventDefault();var btn=document.querySelector('.category[data-cat="'+a.dataset.footCat+'"]');if(btn)btn.click();});});
     renderProductos();
-  }).catch(function(){});
+  }).catch(function(err){
+    productos=[];
+    productsEl.innerHTML='<div class="empty">No pudimos cargar el catálogo en este momento. Por favor, intentá nuevamente en unos minutos.</div>';
+    if(window.console)console.error(err);
+  });
 })();
 </script>
 </body>
