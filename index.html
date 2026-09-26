@@ -90,7 +90,7 @@ button{-webkit-tap-highlight-color:rgba(0,0,0,.06)}
 .category{flex:0 0 148px;min-width:148px;min-height:150px;scroll-snap-align:start;border:1px solid var(--line);border-radius:18px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:12px 10px;transition:.2s;color:var(--ink);text-align:center;box-shadow:0 6px 18px rgba(20,36,58,.05)}
 .category:first-child{flex-basis:168px;min-width:168px;align-items:flex-start;text-align:left;padding:18px 16px;background:var(--pink-soft)}
 .category:hover,.category.active{transform:translateY(-3px);box-shadow:var(--shadow);border-color:#ddd}
-.category-thumb{width:64px;height:64px;border-radius:16px;object-fit:cover;background:#f3f5f7;display:block}
+.category-thumb{width:72px;height:72px;border-radius:16px;object-fit:contain;padding:7px;background:#f7f8fa;display:block;box-shadow:0 5px 14px rgba(20,36,58,.07)}
 .category:first-child .category-thumb,.category:first-child .category-icon{display:none}
 .category-icon{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:28px;background:#fff3a8}
 .category strong{font-size:13px;line-height:1.2;color:var(--ink)}
@@ -670,6 +670,31 @@ document.addEventListener("click", e => { if (!e.target.closest(".search")) sugg
   if (next) next.onclick = function(){ move(1); };
 })();
 
+/* Íconos de categoría embebidos (SVG propio, no depende de imágenes externas).
+   Se usan cuando la categoría no tiene foto propia en Supabase, o como respaldo
+   si la URL de imagen de un producto se cae. */
+var CAT_ICONS = {
+  celular: '<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#14243A" stroke-width="1.8"><rect x="7" y="2" width="10" height="20" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/></svg>',
+  parlante: '<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#14243A" stroke-width="1.8"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="8" r="2.4"/><circle cx="12" cy="15.5" r="3.6"/></svg>',
+  reloj: '<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#14243A" stroke-width="1.8"><rect x="7" y="1.5" width="10" height="4" rx="1.2"/><rect x="7" y="18.5" width="10" height="4" rx="1.2"/><circle cx="12" cy="12" r="6.5"/><path d="M12 9v3l2 1.3"/></svg>',
+  audio: '<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#14243A" stroke-width="1.8"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="2.5" y="13" width="4.5" height="7" rx="1.8"/><rect x="17" y="13" width="4.5" height="7" rx="1.8"/></svg>',
+  regalo: '<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#14243A" stroke-width="1.8"><rect x="3" y="8" width="18" height="13" rx="1.5"/><path d="M3 12h18"/><path d="M12 8v13"/><path d="M12 8c-1.8 0-3.2-1.6-3.2-3.2S9.6 2 11 2c1.6 0 1.6 3 1 4.5"/><path d="M12 8c1.8 0 3.2-1.6 3.2-3.2S14.4 2 13 2c-1.6 0-1.6 3-1 4.5"/></svg>'
+};
+function categoryIconSvg(nombre){
+  var n = normalizarBusqueda(nombre);
+  if (/celular|smartphone|telefono/.test(n)) return CAT_ICONS.celular;
+  if (/parlante|bocina|altavoz/.test(n)) return CAT_ICONS.parlante;
+  if (/smartwatch|reloj/.test(n)) return CAT_ICONS.reloj;
+  if (/audio|auricular|headphone|casco/.test(n)) return CAT_ICONS.audio;
+  return CAT_ICONS.regalo;
+}
+window.catImgFallback = function(imgEl){
+  var span = document.createElement('span');
+  span.className = 'category-icon';
+  span.innerHTML = categoryIconSvg(imgEl.dataset.catName || '');
+  imgEl.replaceWith(span);
+};
+
 /* Supabase */
 (function(){
   var SB_URL="https://edrsmodtaalisaiqpeoa.supabase.co";
@@ -703,9 +728,13 @@ document.addEventListener("click", e => { if (!e.target.closest(".search")) sugg
     if (box) {
       box.insertAdjacentHTML("beforeend", cats.map(function(c){
         var catId = String(c.id || c.nombre || "").toLowerCase();
-        var img = c.imagen
-          ? '<img class="category-thumb" src="'+escHtml(c.imagen)+'" alt="" loading="lazy">'
-          : '<span class="category-icon">🎁</span>';
+        var catProducts = productos.filter(function(p){ return String(p.categoria || '').toLowerCase() === catId; });
+        var withImg = catProducts.filter(function(p){ return p.imagen; });
+        var categoryImage = c.imagen || (withImg.length ? withImg[0].imagen : '');
+        var iconHtml = '<span class="category-icon">'+categoryIconSvg(c.nombre)+'</span>';
+        var img = categoryImage
+          ? '<img class="category-thumb" data-cat-name="'+escHtml(c.nombre)+'" src="'+escHtml(categoryImage)+'" alt="'+escHtml(c.nombre)+'" loading="lazy" onerror="window.catImgFallback(this)">'
+          : iconHtml;
         return '<button class="category" type="button" data-cat="'+escHtml(catId)+'">'+img+'<strong>'+escHtml(c.nombre)+'</strong></button>';
       }).join(""));
     }
