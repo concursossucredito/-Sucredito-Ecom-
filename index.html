@@ -270,9 +270,30 @@ button{-webkit-tap-highlight-color:rgba(0,0,0,.06)}
 /* Filtro por cuota */
 .cuota-filter{margin:0 0 20px;padding:16px 18px;border-radius:16px;background:linear-gradient(135deg,#fffce8,#fff9d0);border:1px solid #f0e68c}
 .cuota-filter[hidden]{display:none}
-.cf-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:12px;font-size:14px}
-.cf-top output{font-weight:900;font-size:16px;color:var(--ink)}
+.cf-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:4px;font-size:14px}
+.cf-out{display:block;margin:0 0 10px;font-weight:900;font-size:16px;color:var(--ink)}
+.cf-clear{display:inline-flex;align-items:center;gap:6px;flex:none;border:1px solid var(--ink);background:#fff;color:var(--ink);border-radius:999px;padding:6px 12px;font-size:12px;font-weight:800;cursor:pointer;transition:transform .15s,background .2s}
+.cf-clear[hidden]{display:none}
+.cf-clear:hover{background:var(--ink);color:#fff}
+.cf-clear:active{transform:scale(.95)}
 .cf-scale{display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--muted);font-weight:700}
+
+/* Filtro de cuotas en celular */
+@media(max-width:760px){
+.cuota-filter{padding:14px 14px 12px;margin:0 0 14px}
+.cf-top{font-size:13px;align-items:flex-start}
+.cf-top strong{line-height:1.25}
+.cf-clear{padding:9px 14px;font-size:13px;min-height:40px}
+.cf-out{font-size:15px;margin-bottom:6px}
+.dual-range{height:40px}
+.dr-track{left:16px;right:16px;top:17px}
+.dual-range input[type=range]{height:40px;touch-action:pan-y}
+.dual-range input[type=range]::-webkit-slider-runnable-track{height:40px}
+.dual-range input[type=range]::-moz-range-track{height:40px}
+.dual-range input[type=range]::-webkit-slider-thumb{width:32px;height:32px;margin-top:4px}
+.dual-range input[type=range]::-moz-range-thumb{width:26px;height:26px}
+.cf-scale{margin-top:4px;font-size:12px}
+}
 
 /* Micro-animaciones */
 .card.rv{opacity:0}
@@ -370,7 +391,8 @@ button{-webkit-tap-highlight-color:rgba(0,0,0,.06)}
         <button class="clear-filter" id="clearFilter" type="button">Ver todos</button>
       </div>
       <div class="cuota-filter" id="cuotaFilter" hidden>
-<div class="cf-top"><strong>¿Cuánto querés pagar por mes?</strong><output id="cuotaOut" for="cuotaRangeMin cuotaRangeMax">Sin límite</output></div>
+<div class="cf-top"><strong>¿Cuánto querés pagar por mes?</strong><button type="button" class="cf-clear" id="cuotaClear" hidden><span aria-hidden="true">✕</span> Borrar filtro</button></div>
+<output class="cf-out" id="cuotaOut" for="cuotaRangeMin cuotaRangeMax">Sin límite</output>
 <div class="dual-range">
 <div class="dr-track" id="drTrack"></div>
 <input type="range" id="cuotaRangeMin" aria-label="Cuota mensual mínima" min="0" max="0" step="1000" value="0">
@@ -589,8 +611,9 @@ return true;
 }
 function actualizarCuotaUI(){
 const r1 = document.getElementById("cuotaRangeMin"), r2 = document.getElementById("cuotaRangeMax");
-const out = document.getElementById("cuotaOut"), tr = document.getElementById("drTrack");
+const out = document.getElementById("cuotaOut"), tr = document.getElementById("drTrack"), clr = document.getElementById("cuotaClear");
 if (!r1 || !r2 || !out || !tr) return;
+if (clr) clr.hidden = !cuotaActivo();
 const lo = Number(r1.min), hi = Number(r1.max), span = (hi - lo) || 1;
 tr.style.setProperty("--lo", ((r1.value - lo) / span * 100) + "%");
 tr.style.setProperty("--hi", ((r2.value - lo) / span * 100) + "%");
@@ -631,6 +654,8 @@ actualizarCuotaUI();
 renderProductos();
 }
 r1.addEventListener("input", onInput);
+const clr = document.getElementById("cuotaClear");
+if (clr) clr.addEventListener("click", function(){ resetCuota(); renderProductos(); });
 r2.addEventListener("input", onInput);
 actualizarCuotaUI();
 }
