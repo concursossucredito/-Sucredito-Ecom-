@@ -272,10 +272,6 @@ button{-webkit-tap-highlight-color:rgba(0,0,0,.06)}
 .cuota-filter[hidden]{display:none}
 .cf-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:12px;font-size:14px}
 .cf-top output{font-weight:900;font-size:16px;color:var(--ink)}
-#cuotaRange{width:100%;height:6px;-webkit-appearance:none;appearance:none;border-radius:6px;outline:none;cursor:pointer;background:linear-gradient(90deg,var(--ink) var(--pct,100%),#e6dd7a var(--pct,100%))}
-#cuotaRange::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:#fff;border:3px solid var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.2);transition:transform .15s}
-#cuotaRange:active::-webkit-slider-thumb{transform:scale(1.2)}
-#cuotaRange::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#fff;border:3px solid var(--ink)}
 .cf-scale{display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--muted);font-weight:700}
 
 /* Micro-animaciones */
@@ -288,6 +284,20 @@ button{-webkit-tap-highlight-color:rgba(0,0,0,.06)}
 .modal.open .modal-box{animation:modalIn .3s cubic-bezier(.2,.8,.2,1)}
 @keyframes modalIn{from{opacity:0;transform:translateY(28px) scale(.98)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){.card.rv.in,.cd-box b.tick,.modal.open .modal-box{animation:none}}
+/* Slider doble (mínimo y máximo) */
+.dual-range{position:relative;height:28px}
+.dr-track{position:absolute;left:12px;right:12px;top:11px;height:6px;border-radius:6px;background:linear-gradient(90deg,#e6dd7a var(--lo,0%),var(--ink) var(--lo,0%),var(--ink) var(--hi,100%),#e6dd7a var(--hi,100%))}
+.dual-range input[type=range]{position:absolute;left:0;top:0;width:100%;height:28px;margin:0;padding:0;background:none;-webkit-appearance:none;appearance:none;pointer-events:none;outline:none}
+.dual-range input[type=range]::-webkit-slider-runnable-track{height:28px;background:transparent}
+.dual-range input[type=range]::-moz-range-track{height:28px;background:transparent}
+.dual-range input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;pointer-events:auto;cursor:grab;width:24px;height:24px;margin-top:2px;border-radius:50%;background:#fff;border:3px solid var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.2);transition:transform .15s}
+.dual-range input[type=range]::-moz-range-thumb{pointer-events:auto;cursor:grab;width:18px;height:18px;border-radius:50%;background:#fff;border:3px solid var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.dual-range input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2);cursor:grabbing}
+.dual-range input[type=range]:focus-visible::-webkit-slider-thumb{outline:3px solid var(--pink);outline-offset:2px}
+/* Alineación de las cards: financiación, stock y botón quedan abajo y parejos */
+.specs{flex:1 0 auto}
+.stock-tag{margin-bottom:0}
+.buy{margin-top:12px}
 </style>
 </head>
 <body>
@@ -360,9 +370,13 @@ button{-webkit-tap-highlight-color:rgba(0,0,0,.06)}
         <button class="clear-filter" id="clearFilter" type="button">Ver todos</button>
       </div>
       <div class="cuota-filter" id="cuotaFilter" hidden>
-<div class="cf-top"><label for="cuotaRange"><strong>¿Cuánto querés pagar por mes?</strong></label><output id="cuotaOut">Sin límite</output></div>
-<input type="range" id="cuotaRange" min="0" max="0" step="1000" value="0">
-<div class="cf-scale"><span id="cuotaMinLbl"></span><span>Sin límite</span></div>
+<div class="cf-top"><strong>¿Cuánto querés pagar por mes?</strong><output id="cuotaOut" for="cuotaRangeMin cuotaRangeMax">Sin límite</output></div>
+<div class="dual-range">
+<div class="dr-track" id="drTrack"></div>
+<input type="range" id="cuotaRangeMin" aria-label="Cuota mensual mínima" min="0" max="0" step="1000" value="0">
+<input type="range" id="cuotaRangeMax" aria-label="Cuota mensual máxima" min="0" max="0" step="1000" value="0">
+</div>
+<div class="cf-scale"><span id="cuotaMinLbl"></span><span id="cuotaMaxLbl"></span></div>
 </div>
       <div class="products" id="products"></div>
     </section>
@@ -558,46 +572,67 @@ var pid = new URLSearchParams(location.search).get("p");
 if (pid) setTimeout(function(){ openProduct(pid); }, 1900);
 }
 
-/* Filtro por cuota mensual (usa la cuota más baja de cada producto) */
-let cuotaTope = null; // null = sin límite
+/* Filtro por cuota mensual: rango mín-máx (usa la cuota más baja de cada producto) */
+let cuotaMin = null, cuotaMax = null; // null = sin límite de ese lado
+function cuotaActivo(){ return cuotaMin !== null || cuotaMax !== null; }
 function cuotaMinima(p){
 const v = obtenerOpcionesCuotas(p).map(o => o.valor_cuota).filter(x => x > 0);
 return v.length ? Math.min(...v) : null;
 }
 function cuotaOk(p){
-if (cuotaTope === null) return true;
+if (!cuotaActivo()) return true;
 const c = cuotaMinima(p);
-return c !== null && c <= cuotaTope;
+if (c === null) return false;
+if (cuotaMin !== null && c < cuotaMin) return false;
+if (cuotaMax !== null && c > cuotaMax) return false;
+return true;
 }
 function actualizarCuotaUI(){
-const range = document.getElementById("cuotaRange"), out = document.getElementById("cuotaOut");
-if (!range || !out) return;
-range.style.setProperty("--pct", ((range.value - range.min) / (range.max - range.min) * 100) + "%");
-out.textContent = cuotaTope === null ? "Sin límite" : "Hasta $ " + pts(cuotaTope) + " por mes";
+const r1 = document.getElementById("cuotaRangeMin"), r2 = document.getElementById("cuotaRangeMax");
+const out = document.getElementById("cuotaOut"), tr = document.getElementById("drTrack");
+if (!r1 || !r2 || !out || !tr) return;
+const lo = Number(r1.min), hi = Number(r1.max), span = (hi - lo) || 1;
+tr.style.setProperty("--lo", ((r1.value - lo) / span * 100) + "%");
+tr.style.setProperty("--hi", ((r2.value - lo) / span * 100) + "%");
+r1.style.zIndex = (Number(r1.value) - lo) / span > 0.5 ? 4 : 2; // que el mínimo no quede trabado detrás
+r2.style.zIndex = 3;
+out.textContent = cuotaMin === null && cuotaMax === null ? "Sin límite"
+: cuotaMin === null ? "Hasta $ " + pts(cuotaMax) + " por mes"
+: cuotaMax === null ? "Desde $ " + pts(cuotaMin) + " por mes"
+: "$ " + pts(cuotaMin) + " a $ " + pts(cuotaMax) + " por mes";
 }
 function resetCuota(){
-const range = document.getElementById("cuotaRange");
-if (!range) return;
-cuotaTope = null; range.value = range.max; actualizarCuotaUI();
+const r1 = document.getElementById("cuotaRangeMin"), r2 = document.getElementById("cuotaRangeMax");
+if (!r1 || !r2) return;
+cuotaMin = null; cuotaMax = null;
+r1.value = r1.min; r2.value = r2.max;
+actualizarCuotaUI();
 }
 function initCuotaFilter(){
-const box = document.getElementById("cuotaFilter"), range = document.getElementById("cuotaRange");
+const box = document.getElementById("cuotaFilter");
+const r1 = document.getElementById("cuotaRangeMin"), r2 = document.getElementById("cuotaRangeMax");
 const vals = productos.map(cuotaMinima).filter(v => v !== null);
-if (!box || !range || vals.length < 2) return;
-const step = Number(range.step) || 1000;
+if (!box || !r1 || !r2 || vals.length < 2) return;
+const step = Number(r1.step) || 1000;
 const lo = Math.floor(Math.min(...vals) / step) * step;
 const hi = Math.ceil(Math.max(...vals) / step) * step;
 if (hi <= lo) return;
-range.min = lo; range.max = hi; range.value = hi;
+[r1, r2].forEach(r => { r.min = lo; r.max = hi; });
+r1.value = lo; r2.value = hi;
 document.getElementById("cuotaMinLbl").textContent = "$ " + pts(lo);
+document.getElementById("cuotaMaxLbl").textContent = "$ " + pts(hi);
 box.hidden = false;
-actualizarCuotaUI();
-range.addEventListener("input", () => {
-const v = Number(range.value);
-cuotaTope = v >= hi ? null : v;
+function onInput(e){
+let a = Number(r1.value), b = Number(r2.value);
+if (a > b) { if (e.target === r1) { a = b; r1.value = a; } else { b = a; r2.value = b; } }
+cuotaMin = a <= lo ? null : a;
+cuotaMax = b >= hi ? null : b;
 actualizarCuotaUI();
 renderProductos();
-});
+}
+r1.addEventListener("input", onInput);
+r2.addEventListener("input", onInput);
+actualizarCuotaUI();
 }
 
 function renderProductos(){
@@ -608,7 +643,7 @@ function renderProductos(){
     return categoriaOk && (!q || texto.includes(q)) && cuotaOk(p);
   });
   resultText.textContent = `${lista.length} producto${lista.length===1?"":"s"} disponible${lista.length===1?"":"s"}.`;
-  clearFilter.style.display = (filtroActual !== "todos" || q || cuotaTope !== null) ? "block" : "none";
+  clearFilter.style.display = (filtroActual !== "todos" || q || cuotaActivo()) ? "block" : "none";
   if (!lista.length) {
     productsEl.innerHTML = `<div class="empty">No encontramos productos.<br><br><button class="primary" type="button" onclick="resetCatalogo()">Ver todos</button></div>`;
     return;
