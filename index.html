@@ -49,6 +49,8 @@ button{-webkit-tap-highlight-color:rgba(0,0,0,.06)}
 .search{flex:1;max-width:600px;margin:auto;display:flex;position:relative;z-index:6000}
 .search input{width:100%;height:48px;border:0;border-radius:28px;padding:0 98px 0 20px;outline:none;background:#fff;color:var(--ink);box-shadow:0 3px 12px rgba(0,0,0,.06)}
 .search button{position:absolute;right:4px;top:4px;width:40px;height:40px;border:0;border-radius:50%;background:#111;color:#fff;font-size:18px}
+.search button:not(.search-clear){display:flex;align-items:center;justify-content:center;padding:0}
+.search button svg{width:20px;height:20px}
 .search .search-clear{display:none;position:absolute;right:50px;top:50%;transform:translateY(-50%);width:32px;height:32px;padding:0;border:0;border-radius:50%;background:#eceef1;color:#444;font-size:14px;align-items:center;justify-content:center}
 .search.has-text .search-clear{display:flex}
 .search-suggestions{position:absolute;left:0;right:0;top:calc(100% + 7px);z-index:99999;display:none;background:#fff;border:1px solid #e2e5ea;border-radius:15px;box-shadow:0 15px 35px rgba(20,36,58,.16);max-height:390px;overflow-y:auto}
@@ -248,6 +250,44 @@ button{-webkit-tap-highlight-color:rgba(0,0,0,.06)}
   .specs div:nth-child(n+3){display:block}
 }
 #productos{scroll-margin-top:120px}
+/* Compartir (reemplaza al corazón) */
+.favorite{display:flex;align-items:center;justify-content:center;padding:0;transition:transform .2s,background .2s}
+.favorite svg{width:17px;height:17px}
+.favorite:hover{transform:scale(1.12);background:var(--yellow)}
+.favorite:active{transform:scale(.92)}
+
+/* Cuenta regresiva */
+.countdown{margin:0 0 24px}
+.cd-label{font-size:13px;font-weight:800;color:var(--pink);margin-bottom:10px}
+.cd-boxes{display:flex;gap:10px}
+.cd-box{min-width:66px;padding:10px 8px 8px;border-radius:16px;background:#fff;box-shadow:0 8px 22px rgba(240,46,120,.14);text-align:center}
+.cd-box b{display:block;font-size:28px;font-weight:900;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums}
+.cd-box span{display:block;margin-top:5px;font-size:11px;font-weight:700;color:var(--muted)}
+.cd-box b.tick{animation:cdTick .35s ease}
+@keyframes cdTick{from{transform:translateY(-6px);opacity:.3}to{transform:none;opacity:1}}
+@media(max-width:760px){.cd-box{min-width:58px}.cd-box b{font-size:24px}}
+
+/* Filtro por cuota */
+.cuota-filter{margin:0 0 20px;padding:16px 18px;border-radius:16px;background:linear-gradient(135deg,#fffce8,#fff9d0);border:1px solid #f0e68c}
+.cuota-filter[hidden]{display:none}
+.cf-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:12px;font-size:14px}
+.cf-top output{font-weight:900;font-size:16px;color:var(--ink)}
+#cuotaRange{width:100%;height:6px;-webkit-appearance:none;appearance:none;border-radius:6px;outline:none;cursor:pointer;background:linear-gradient(90deg,var(--ink) var(--pct,100%),#e6dd7a var(--pct,100%))}
+#cuotaRange::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:#fff;border:3px solid var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.2);transition:transform .15s}
+#cuotaRange:active::-webkit-slider-thumb{transform:scale(1.2)}
+#cuotaRange::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#fff;border:3px solid var(--ink)}
+.cf-scale{display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--muted);font-weight:700}
+
+/* Micro-animaciones */
+.card.rv{opacity:0}
+.card.rv.in{opacity:1;animation:cardIn .45s ease var(--d,0ms) backwards}
+@keyframes cardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.primary span{transition:transform .2s}
+.primary:hover span{transform:translateX(5px)}
+.primary:active,.buy:active,.wa-large:active,.category:active,.modal-cuota-btn:active{transform:scale(.97)}
+.modal.open .modal-box{animation:modalIn .3s cubic-bezier(.2,.8,.2,1)}
+@keyframes modalIn{from{opacity:0;transform:translateY(28px) scale(.98)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.card.rv.in,.cd-box b.tick,.modal.open .modal-box{animation:none}}
 </style>
 </head>
 <body>
@@ -263,12 +303,12 @@ button{-webkit-tap-highlight-color:rgba(0,0,0,.06)}
     <div class="search">
       <input id="searchInput" type="search" placeholder="Buscá un producto..." autocomplete="off">
       <button type="button" class="search-clear" aria-label="Borrar">✕</button>
-      <button type="button" aria-label="Buscar">⌕</button>
+      <button type="button" aria-label="Buscar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5 16 16"/></svg></button>
       <div id="searchSuggestions" class="search-suggestions" role="listbox"></div>
     </div>
     <a class="whatsapp-top" href="#" onclick="openGeneralWhatsApp();return false;">
       <span class="wa-icon wa-top-icon" aria-hidden="true">
-        <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="#25D366"/><path fill="#fff" d="M23.1 8.8A9.96 9.96 0 0 0 16 5.85c-5.52 0-10 4.48-10 10 0 1.76.46 3.41 1.27 4.84L5.75 26.1l5.53-1.45A9.95 9.95 0 0 0 16 25.85c5.52 0 10-4.48 10-10 0-2.67-1.04-5.18-2.9-7.05Zm-7.1 15.1a8.2 8.2 0 0 1-4.18-1.14l-.3-.18-3.28.86.88-3.2-.2-.33a8.2 8.2 0 1 1 7.08 3.99Z"/></svg>
+        <svg viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.18 2.095 3.195 5.076 4.483.709.3 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
       </span>
       <div>Comprá por<br><strong>WhatsApp</strong></div>
     </a>
@@ -282,6 +322,15 @@ button{-webkit-tap-highlight-color:rgba(0,0,0,.06)}
       <div class="script">Día de la Madre ♡</div>
       <h1>Regalos para mamá<br>que <span>realmente va a usar</span></h1>
       <p>Celulares, parlantes, relojes y más.<strong>Exclusivo para clientes Sucrédito.</strong></p>
+      <div class="countdown" id="countdown">
+<div class="cd-label">Faltan para el Día de la Madre</div>
+<div class="cd-boxes">
+<div class="cd-box"><b id="cdD">--</b><span>días</span></div>
+<div class="cd-box"><b id="cdH">--</b><span>horas</span></div>
+<div class="cd-box"><b id="cdM">--</b><span>min</span></div>
+<div class="cd-box"><b id="cdS">--</b><span>seg</span></div>
+</div>
+</div>
       <a href="#productos" class="primary">VER PRODUCTOS <span>→</span></a>
     </div>
   </section>
@@ -310,6 +359,11 @@ button{-webkit-tap-highlight-color:rgba(0,0,0,.06)}
         </div>
         <button class="clear-filter" id="clearFilter" type="button">Ver todos</button>
       </div>
+      <div class="cuota-filter" id="cuotaFilter" hidden>
+<div class="cf-top"><label for="cuotaRange"><strong>¿Cuánto querés pagar por mes?</strong></label><output id="cuotaOut">Sin límite</output></div>
+<input type="range" id="cuotaRange" min="0" max="0" step="1000" value="0">
+<div class="cf-scale"><span id="cuotaMinLbl"></span><span>Sin límite</span></div>
+</div>
       <div class="products" id="products"></div>
     </section>
 
@@ -394,7 +448,7 @@ button{-webkit-tap-highlight-color:rgba(0,0,0,.06)}
         <div id="modalFinance" class="modal-finance"></div>
         <div id="modalStock"></div>
         <button id="modalBuy" class="wa-large" type="button">
-          <span class="wa-icon wa-btn-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="#25D366"/><path fill="#fff" d="M23.1 8.8A9.96 9.96 0 0 0 16 5.85c-5.52 0-10 4.48-10 10 0 1.76.46 3.41 1.27 4.84L5.75 26.1l5.53-1.45A9.95 9.95 0 0 0 16 25.85c5.52 0 10-4.48 10-10 0-2.67-1.04-5.18-2.9-7.05Z"/></svg></span>
+          <span class="wa-icon wa-btn-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.18 2.095 3.195 5.076 4.483.709.3 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></span>
           <span>Comprar por WhatsApp</span>
         </button>
       </div>
@@ -485,15 +539,76 @@ function renderStockTag(stock){
   return `<div class="stock-tag stock-ok"><span class="stock-dot"></span>Stock disponible</div>`;
 }
 
+/* Compartir producto */
+async function shareProduct(id){
+const p = productos.find(x => String(x.id) === String(id));
+if (!p) return;
+const pref = cuotaPreferida(p);
+const url = location.origin + location.pathname + "?p=" + encodeURIComponent(p.id);
+const text = "Mirá este regalo para el Día de la Madre: " + p.marca + " " + p.nombre + (pref ? " · " + pref.cuotas + " cuotas de $ " + pts(pref.valor_cuota) : "");
+trackEvent("Compartir", "clic", p.marca + " " + p.nombre);
+if (navigator.share) {
+try { await navigator.share({ title: p.marca + " " + p.nombre, text: text, url: url }); return; }
+catch (e) { if (e && e.name === "AbortError") return; }
+}
+window.open("https://wa.me/?text=" + encodeURIComponent(text + " " + url), "_blank");
+}
+function abrirProductoCompartido(){
+var pid = new URLSearchParams(location.search).get("p");
+if (pid) setTimeout(function(){ openProduct(pid); }, 1900);
+}
+
+/* Filtro por cuota mensual (usa la cuota más baja de cada producto) */
+let cuotaTope = null; // null = sin límite
+function cuotaMinima(p){
+const v = obtenerOpcionesCuotas(p).map(o => o.valor_cuota).filter(x => x > 0);
+return v.length ? Math.min(...v) : null;
+}
+function cuotaOk(p){
+if (cuotaTope === null) return true;
+const c = cuotaMinima(p);
+return c !== null && c <= cuotaTope;
+}
+function actualizarCuotaUI(){
+const range = document.getElementById("cuotaRange"), out = document.getElementById("cuotaOut");
+if (!range || !out) return;
+range.style.setProperty("--pct", ((range.value - range.min) / (range.max - range.min) * 100) + "%");
+out.textContent = cuotaTope === null ? "Sin límite" : "Hasta $ " + pts(cuotaTope) + " por mes";
+}
+function resetCuota(){
+const range = document.getElementById("cuotaRange");
+if (!range) return;
+cuotaTope = null; range.value = range.max; actualizarCuotaUI();
+}
+function initCuotaFilter(){
+const box = document.getElementById("cuotaFilter"), range = document.getElementById("cuotaRange");
+const vals = productos.map(cuotaMinima).filter(v => v !== null);
+if (!box || !range || vals.length < 2) return;
+const step = Number(range.step) || 1000;
+const lo = Math.floor(Math.min(...vals) / step) * step;
+const hi = Math.ceil(Math.max(...vals) / step) * step;
+if (hi <= lo) return;
+range.min = lo; range.max = hi; range.value = hi;
+document.getElementById("cuotaMinLbl").textContent = "$ " + pts(lo);
+box.hidden = false;
+actualizarCuotaUI();
+range.addEventListener("input", () => {
+const v = Number(range.value);
+cuotaTope = v >= hi ? null : v;
+actualizarCuotaUI();
+renderProductos();
+});
+}
+
 function renderProductos(){
   const q = normalizarBusqueda(busqueda);
   const lista = productos.filter(p => {
     const categoriaOk = filtroActual === "todos" || String(p.categoria||"").toLowerCase() === String(filtroActual).toLowerCase();
     const texto = normalizarBusqueda(`${p.marca} ${p.nombre} ${p.categoria} ${(p.specs||[]).join(" ")}`);
-    return categoriaOk && (!q || texto.includes(q));
+    return categoriaOk && (!q || texto.includes(q)) && cuotaOk(p);
   });
   resultText.textContent = `${lista.length} producto${lista.length===1?"":"s"} disponible${lista.length===1?"":"s"}.`;
-  clearFilter.style.display = (filtroActual !== "todos" || q) ? "block" : "none";
+  clearFilter.style.display = (filtroActual !== "todos" || q || cuotaTope !== null) ? "block" : "none";
   if (!lista.length) {
     productsEl.innerHTML = `<div class="empty">No encontramos productos.<br><br><button class="primary" type="button" onclick="resetCatalogo()">Ver todos</button></div>`;
     return;
@@ -501,7 +616,7 @@ function renderProductos(){
   productsEl.innerHTML = lista.map(p => `
     <article class="card" role="button" tabindex="0" onclick="openProduct('${escHtml(p.id)}')" onkeydown="if(event.key==='Enter')openProduct('${escHtml(p.id)}')">
       ${p.badge ? `<div class="badge">${escHtml(p.badge)}</div>` : ""}
-      <button class="favorite" type="button" aria-label="Favorito" onclick="event.stopPropagation()">♡</button>
+      <button class="favorite" type="button" aria-label="Compartir" data-share="${escHtml(p.id)}" onclick="event.stopPropagation();shareProduct(this.dataset.share)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button>
       <img class="product-img" src="${escHtml(p.imagen||"")}" alt="${escHtml(p.marca)} ${escHtml(p.nombre)}" loading="lazy">
       <div class="card-body">
         <div class="brand-name">${escHtml(p.marca||"")}</div>
@@ -510,7 +625,7 @@ function renderProductos(){
         ${renderFinanceTag(p)}
         ${renderStockTag(p.stock)}
         <button class="buy" type="button" onclick="event.stopPropagation();openProduct('${escHtml(p.id)}')">
-          <span class="wa-icon wa-btn-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="#25D366"/><path fill="#fff" d="M23.1 8.8A9.96 9.96 0 0 0 16 5.85c-5.52 0-10 4.48-10 10 0 1.76.46 3.41 1.27 4.84L5.75 26.1l5.53-1.45A9.95 9.95 0 0 0 16 25.85c5.52 0 10-4.48 10-10 0-2.67-1.04-5.18-2.9-7.05Z"/></svg></span>
+          <span class="wa-icon wa-btn-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.18 2.095 3.195 5.076 4.483.709.3 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></span>
           <span>Comprar por WhatsApp</span>
         </button>
       </div>
@@ -592,6 +707,7 @@ function openGeneralWhatsApp(){
 }
 
 function resetCatalogo(){
+  resetCuota();
   filtroActual = "todos";
   busqueda = "";
   searchInput.value = "";
@@ -764,10 +880,51 @@ window.catImgFallback = function(imgEl){
       });
     });
     renderProductos();
+  initCuotaFilter();
+abrirProductoCompartido();
   }).catch(function(err){
     productsEl.innerHTML = '<div class="empty">No pudimos cargar el catálogo. Intentá de nuevo en unos minutos.</div>';
     console.error(err);
   });
+})();
+</script>
+<script>
+/* Cuenta regresiva: 18/10/2026 00:00 hora Argentina (tercer domingo de octubre) */
+(function(){
+var META = new Date("2026-10-18T00:00:00-03:00").getTime();
+var box = document.getElementById("countdown");
+if (!box) return;
+var els = {d:document.getElementById("cdD"), h:document.getElementById("cdH"), m:document.getElementById("cdM"), s:document.getElementById("cdS")};
+var prev = {}, timer;
+function set(k, v){
+var t = String(v).padStart(2, "0");
+if (prev[k] === t) return;
+prev[k] = t; els[k].textContent = t;
+els[k].classList.remove("tick"); void els[k].offsetWidth; els[k].classList.add("tick");
+}
+function tick(){
+var diff = META - Date.now();
+if (diff <= 0) { box.style.display = "none"; clearInterval(timer); return; }
+var s = Math.floor(diff / 1000);
+set("d", Math.floor(s / 86400)); set("h", Math.floor(s % 86400 / 3600));
+set("m", Math.floor(s % 3600 / 60)); set("s", s % 60);
+}
+tick(); timer = setInterval(tick, 1000);
+})();
+
+/* Aparición suave de las cards (también al filtrar) */
+(function(){
+var grid = document.getElementById("products");
+if (!grid || !("IntersectionObserver" in window)) return;
+var io = new IntersectionObserver(function(entries){
+entries.forEach(function(en){ if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
+}, {threshold: .12});
+function prep(){
+grid.querySelectorAll(".card:not(.rv)").forEach(function(c, i){
+c.classList.add("rv"); c.style.setProperty("--d", (i % 4) * 60 + "ms"); io.observe(c);
+});
+}
+new MutationObserver(prep).observe(grid, {childList: true}); prep();
 })();
 </script>
 </body>
