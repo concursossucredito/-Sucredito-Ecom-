@@ -69,9 +69,10 @@ button{-webkit-tap-highlight-color:rgba(0,0,0,.06)}
 .wa-btn-icon{width:22px;height:22px}
 .wa-top-icon{width:31px;height:31px}
 
-.hero{max-width:1440px;margin:auto;min-height:440px;position:relative;overflow:hidden;background-color:#fff0f5;background-image:url("assets/hero-dia-madre.webp"),radial-gradient(circle at 85% 20%,#ffd3e3 0,rgba(255,211,227,0) 45%),linear-gradient(135deg,#fff7fa 0%,#ffe6ef 100%);background-repeat:no-repeat;background-size:auto 100%,auto,auto;background-position:right center,center,center}
+.hero{max-width:1440px;margin:auto;min-height:440px;position:relative;overflow:hidden;background-color:#fff0f5;background-image:url("https://concursossucredito.github.io/-Sucredito-Ecom-/assets/hero-dia-madre.webp"),radial-gradient(circle at 85% 20%,#ffd3e3 0,rgba(255,211,227,0) 45%),linear-gradient(135deg,#fff7fa 0%,#ffe6ef 100%);background-repeat:no-repeat;background-size:auto 100%,auto,auto;background-position:right center,center,center}
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,247,250,.96) 0%,rgba(255,247,250,.85) 38%,rgba(255,247,250,0) 62%)}
 .hero-content{position:relative;z-index:2;max-width:650px;padding:60px 55px 55px}
+.hero-photo-mobile{display:none}
 .script{font-family:Pacifico,cursive;color:var(--pink);font-size:34px;margin-bottom:12px}
 .hero h1{font-size:54px;line-height:1.02;letter-spacing:-2.5px;margin:0 0 18px;font-weight:900;color:var(--ink)}
 .hero h1 span{color:var(--pink)}
@@ -204,12 +205,38 @@ button{-webkit-tap-highlight-color:rgba(0,0,0,.06)}
   .whatsapp-top div{display:none}
   .search{order:3;flex:1 0 100%;width:100%;margin:2px 0 0}
   .search input{height:44px;border-radius:14px;font-size:16px!important;padding-right:92px}
-  .hero{min-height:520px;background-size:auto 46%,auto,auto;background-position:right bottom,center,center;border-radius:0 0 22px 22px}
-  .hero-overlay{background:linear-gradient(180deg,rgba(255,247,250,.97) 0%,rgba(255,247,250,.95) 50%,rgba(255,247,250,0) 64%)}
-  .hero-content{padding:30px 20px 26px}
+  .hero{
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+    background-image:none;
+    background:linear-gradient(180deg,#fff7fa 0%,#ffe6ef 100%);
+    border-radius:0 0 22px 22px;
+  }
+  .hero-overlay{display:none}
+  .hero-content{padding:28px 20px 18px;max-width:none}
   .script{font-size:26px}
-  .hero h1{font-size:35px;letter-spacing:-1.5px}
-  .hero p{font-size:15px}
+  .hero h1{font-size:32px;letter-spacing:-1.4px;margin-bottom:12px}
+  .hero p{font-size:15px;margin-bottom:18px}
+  .hero-photo-mobile{
+    display:block;
+    width:100%;
+    max-height:min(42vh, 280px);
+    height:auto;
+    aspect-ratio:724/430;
+    object-fit:cover;
+    object-position:center 28%;
+    margin:0;
+    border-radius:0 0 18px 18px;
+    -webkit-backface-visibility:hidden;
+  }
+  .hero .countdown{margin-bottom:16px}
+  .hero .primary{
+    width:100%;
+    justify-content:center;
+    margin-bottom:4px;
+    padding:14px 20px;
+  }
   .container{padding:0 13px}
   .section{padding:25px 0}
   .section-title{font-size:24px}
@@ -364,6 +391,7 @@ button{-webkit-tap-highlight-color:rgba(0,0,0,.06)}
 </div>
       <a href="#productos" class="primary">VER PRODUCTOS <span>→</span></a>
     </div>
+    <img class="hero-photo-mobile" src="https://concursossucredito.github.io/-Sucredito-Ecom-/assets/hero-dia-madre.webp" alt="Mamá y su hija celebrando el Día de la Madre" width="724" height="430" decoding="async" fetchpriority="high">
   </section>
 
   <div class="container">
