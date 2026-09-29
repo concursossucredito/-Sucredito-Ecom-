@@ -108,6 +108,11 @@ button{-webkit-tap-highlight-color:rgba(0,0,0,.06)}
 .catalog-head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:18px}
 .clear-filter{border:0;background:none;font-weight:700;color:var(--pink);display:none}
 .products{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.load-more-wrap{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 0 8px}
+.load-more-btn{border:0;border-radius:28px;background:var(--ink);color:#fff;font-weight:800;padding:14px 28px;font-size:15px;display:inline-flex;align-items:center;gap:8px;box-shadow:0 8px 22px rgba(20,36,58,.14);transition:transform .15s,filter .15s}
+.load-more-btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.load-more-btn:active{transform:scale(.97)}
+.load-more-hint{font-size:13px;color:var(--muted);font-weight:600}
 .card{position:relative;border:1px solid var(--line);border-radius:18px;background:#fff;cursor:pointer;overflow:hidden;transition:.22s;display:flex;flex-direction:column;color:var(--ink)}
 .card:hover{transform:translateY(-6px);box-shadow:0 18px 45px rgba(20,36,58,.13)}
 .card:hover .product-img{transform:scale(1.045) rotate(-1deg)}
@@ -548,6 +553,8 @@ let productos = [];
 let filtroActual = "todos";
 let busqueda = "";
 let cuotaSeleccionada = null;
+const PAGE_SIZE = 8; // productos visibles al inicio / por cada "Ver más"
+let visibles = PAGE_SIZE;
 
 const productsEl = document.getElementById("products");
 const searchInput = document.getElementById("searchInput");
@@ -688,24 +695,40 @@ r2.addEventListener("input", onInput);
 actualizarCuotaUI();
 }
 
-function renderProductos(){
+function filtrarLista(){
   const q = normalizarBusqueda(busqueda);
-  const lista = productos.filter(p => {
+  return productos.filter(p => {
     const categoriaOk = filtroActual === "todos" || String(p.categoria||"").toLowerCase() === String(filtroActual).toLowerCase();
     const texto = normalizarBusqueda(`${p.marca} ${p.nombre} ${p.categoria} ${(p.specs||[]).join(" ")}`);
     return categoriaOk && (!q || texto.includes(q)) && cuotaOk(p);
   });
-  resultText.textContent = `${lista.length} producto${lista.length===1?"":"s"} disponible${lista.length===1?"":"s"}.`;
-  clearFilter.style.display = (filtroActual !== "todos" || q || cuotaActivo()) ? "block" : "none";
+}
+function resetVisibles(){ visibles = PAGE_SIZE; }
+function verMasProductos(){
+  visibles += PAGE_SIZE;
+  trackEvent("Catálogo", "ver_mas", String(visibles));
+  renderProductos(false);
+}
+function renderProductos(resetPage){
+  if (resetPage !== false) resetVisibles();
+  const lista = filtrarLista();
+  const mostrando = lista.slice(0, visibles);
+  const quedan = lista.length - mostrando.length;
+  resultText.textContent = lista.length
+    ? (quedan > 0
+        ? `Mostrando ${mostrando.length} de ${lista.length} productos.`
+        : `${lista.length} producto${lista.length===1?"":"s"} disponible${lista.length===1?"":"s"}.`)
+    : "0 productos disponibles.";
+  clearFilter.style.display = (filtroActual !== "todos" || normalizarBusqueda(busqueda) || cuotaActivo()) ? "block" : "none";
   if (!lista.length) {
     productsEl.innerHTML = `<div class="empty">No encontramos productos.<br><br><button class="primary" type="button" onclick="resetCatalogo()">Ver todos</button></div>`;
     return;
   }
-  productsEl.innerHTML = lista.map(p => `
+  productsEl.innerHTML = mostrando.map(p => `
     <article class="card" role="button" tabindex="0" onclick="openProduct('${escHtml(p.id)}')" onkeydown="if(event.key==='Enter')openProduct('${escHtml(p.id)}')">
       ${p.badge ? `<div class="badge">${escHtml(p.badge)}</div>` : ""}
       <button class="favorite" type="button" aria-label="Compartir" data-share="${escHtml(p.id)}" onclick="event.stopPropagation();shareProduct(this.dataset.share)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button>
-      <img class="product-img" src="${escHtml(p.imagen||"")}" alt="${escHtml(p.marca)} ${escHtml(p.nombre)}" loading="lazy">
+      <img class="product-img" src="${escHtml(p.imagen||"")}" alt="${escHtml(p.marca)} ${escHtml(p.nombre)}" loading="lazy" decoding="async">
       <div class="card-body">
         <div class="brand-name">${escHtml(p.marca||"")}</div>
         <div class="product-name">${escHtml(p.nombre||"")}</div>
@@ -718,7 +741,11 @@ function renderProductos(){
         </button>
       </div>
     </article>
-  `).join("");
+  `).join("") + (quedan > 0 ? `
+    <div class="load-more-wrap">
+      <button type="button" class="load-more-btn" onclick="verMasProductos()">Ver más productos <span aria-hidden="true">↓</span></button>
+      <span class="load-more-hint">Quedan ${quedan} producto${quedan===1?"":"s"}</span>
+    </div>` : "");
 }
 
 function renderModalFinance(p){
