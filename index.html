@@ -931,7 +931,7 @@ window.catImgFallback = function(imgEl){
   var SB_URL="https://edrsmodtaalisaiqpeoa.supabase.co";
   var SB_KEY="sb_publishable_UvLROmFBK3JzgyqoTPFLbQ_OlAo3yqc";
   Promise.all([
-    fetch(SB_URL+"/rest/v1/productos?select=*&activo=eq.true&stock=gt.0&order=nombre",{headers:{apikey:SB_KEY,Authorization:"Bearer "+SB_KEY}}).then(r=>{if(!r.ok)throw Error("catálogo");return r.json();}),
+    fetch(SB_URL+"/rest/v1/productos?select=*&activo=eq.true&stock=gt.0&order=orden.asc.nullslast,nombre.asc",{headers:{apikey:SB_KEY,Authorization:"Bearer "+SB_KEY}}).then(r=>{if(!r.ok)throw Error("catálogo");return r.json();}),
     fetch(SB_URL+"/rest/v1/categorias?select=*&activo=eq.true&order=orden,nombre",{headers:{apikey:SB_KEY,Authorization:"Bearer "+SB_KEY}}).then(r=>{if(!r.ok)throw Error("categorías");return r.json();})
   ]).then(function(result){
     var rows=result[0]||[], cats=result[1]||[];
