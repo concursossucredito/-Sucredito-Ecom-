@@ -41,7 +41,7 @@ button{-webkit-tap-highlight-color:rgba(0,0,0,.06)}
 .nav{max-width:1440px;margin:auto;min-height:72px;padding:12px 34px;display:flex;align-items:center;gap:26px}
 /* Barra de confianza */
 .trust-bar{background:#14243A;color:#fff;border-bottom:1px solid rgba(255,255,255,.06)}
-.trust-inner{max-width:1440px;margin:auto;padding:10px 28px;display:flex;align-items:center;justify-content:center;gap:8px 28px;flex-wrap:wrap}
+.trust-inner{max-width:1440px;margin:auto;padding:7px 28px;display:flex;align-items:center;justify-content:center;gap:8px 28px;flex-wrap:wrap}
 .trust-item{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;letter-spacing:.2px;color:rgba(255,255,255,.92);white-space:nowrap}
 .trust-item svg{width:16px;height:16px;flex:none;opacity:.95}
 .trust-sep{width:1px;height:14px;background:rgba(255,255,255,.18);flex:none}
@@ -79,15 +79,17 @@ button{-webkit-tap-highlight-color:rgba(0,0,0,.06)}
 .wa-btn-icon{width:22px;height:22px}
 .wa-top-icon{width:31px;height:31px}
 
-.hero{max-width:1440px;margin:auto;min-height:440px;position:relative;overflow:hidden;background-color:#fff0f5;background-image:url("https://concursossucredito.github.io/-Sucredito-Ecom-/assets/hero-dia-madre.webp"),radial-gradient(circle at 85% 20%,#ffd3e3 0,rgba(255,211,227,0) 45%),linear-gradient(135deg,#fff7fa 0%,#ffe6ef 100%);background-repeat:no-repeat;background-size:auto 100%,auto,auto;background-position:right center,center,center}
+.hero{max-width:1440px;margin:auto;min-height:0;height:auto;max-height:min(48vh,420px);position:relative;overflow:hidden;background-color:#fff0f5;background-image:url("https://concursossucredito.github.io/-Sucredito-Ecom-/assets/hero-dia-madre.webp"),radial-gradient(circle at 85% 20%,#ffd3e3 0,rgba(255,211,227,0) 45%),linear-gradient(135deg,#fff7fa 0%,#ffe6ef 100%);background-repeat:no-repeat;background-size:auto 100%,auto,auto;background-position:right center,center,center}
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,247,250,.96) 0%,rgba(255,247,250,.85) 38%,rgba(255,247,250,0) 62%)}
-.hero-content{position:relative;z-index:2;max-width:650px;padding:60px 55px 55px}
+.hero-content{position:relative;z-index:2;max-width:600px;padding:24px 40px 22px}
 .hero-photo-mobile{display:none}
-.script{font-family:Pacifico,cursive;color:var(--pink);font-size:34px;margin-bottom:12px}
-.hero h1{font-size:54px;line-height:1.02;letter-spacing:-2.5px;margin:0 0 18px;font-weight:900;color:var(--ink)}
+.script{font-family:Pacifico,cursive;color:var(--pink);font-size:24px;margin-bottom:6px}
+.hero h1{font-size:36px;line-height:1.05;letter-spacing:-1.6px;margin:0 0 10px;font-weight:900;color:var(--ink)}
 .hero h1 span{color:var(--pink)}
-.hero p{font-size:20px;line-height:1.45;margin:0 0 26px;color:var(--ink)}
+.hero p{font-size:15px;line-height:1.4;margin:0 0 12px;color:var(--ink)}
 .hero p strong{display:block}
+.hero .countdown{margin:0 0 12px}
+.hero .primary{padding:11px 20px;font-size:14px}
 .primary{display:inline-flex;align-items:center;gap:12px;border:0;border-radius:30px;background:var(--yellow);color:#111;font-weight:900;padding:15px 25px;box-shadow:0 8px 20px rgba(255,238,0,.32)}
 .primary:hover{transform:translateY(-2px)}
 
@@ -250,7 +252,8 @@ button{-webkit-tap-highlight-color:rgba(0,0,0,.06)}
     border-radius:0 0 22px 22px;
   }
   .hero-overlay{display:none}
-  .hero-content{padding:28px 20px 18px;max-width:none}
+  .hero{max-height:none;height:auto}
+  .hero-content{padding:22px 20px 16px;max-width:none}
   .script{font-size:26px}
   .hero h1{font-size:32px;letter-spacing:-1.4px;margin-bottom:12px}
   .hero p{font-size:15px;margin-bottom:18px}
@@ -319,16 +322,45 @@ button{-webkit-tap-highlight-color:rgba(0,0,0,.06)}
 .favorite:hover{transform:scale(1.12);background:var(--yellow)}
 .favorite:active{transform:scale(.92)}
 
-/* Cuenta regresiva */
-.countdown{margin:0 0 24px}
-.cd-label{font-size:13px;font-weight:800;color:var(--pink);margin-bottom:10px}
-.cd-boxes{display:flex;gap:10px}
-.cd-box{min-width:66px;padding:10px 8px 8px;border-radius:16px;background:#fff;box-shadow:0 8px 22px rgba(240,46,120,.14);text-align:center}
-.cd-box b{display:block;font-size:28px;font-weight:900;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums}
-.cd-box span{display:block;margin-top:5px;font-size:11px;font-weight:700;color:var(--muted)}
+/* Cuenta regresiva — bien legible sobre el hero */
+.countdown{
+  margin:0 0 14px;
+  display:inline-block;
+  padding:10px 12px 12px;
+  border-radius:16px;
+  background:rgba(255,255,255,.92);
+  border:1px solid rgba(20,36,58,.08);
+  box-shadow:0 8px 24px rgba(20,36,58,.08);
+  backdrop-filter:blur(6px);
+}
+.cd-label{
+  font-size:11px;font-weight:800;color:var(--pink);
+  margin:0 0 8px;letter-spacing:.02em;
+}
+.cd-boxes{display:flex;gap:8px;flex-wrap:nowrap}
+.cd-box{
+  min-width:58px;padding:8px 10px 7px;border-radius:12px;
+  background:var(--yellow);
+  text-align:center;
+  box-shadow:0 2px 0 rgba(0,0,0,.06);
+}
+.cd-box b{
+  display:block;font-size:24px;font-weight:900;line-height:1;
+  color:#111;font-variant-numeric:tabular-nums;
+}
+.cd-box span{
+  display:block;margin-top:4px;font-size:10px;font-weight:800;
+  color:#444;text-transform:lowercase;letter-spacing:.02em;
+}
 .cd-box b.tick{animation:cdTick .35s ease}
-@keyframes cdTick{from{transform:translateY(-6px);opacity:.3}to{transform:none;opacity:1}}
-@media(max-width:760px){.cd-box{min-width:58px}.cd-box b{font-size:24px}}
+@keyframes cdTick{from{transform:translateY(-4px);opacity:.35}to{transform:none;opacity:1}}
+@media(max-width:760px){
+  .countdown{padding:8px 10px 10px;margin:0 0 12px}
+  .cd-boxes{gap:6px}
+  .cd-box{min-width:52px;padding:7px 6px 6px}
+  .cd-box b{font-size:20px}
+  .cd-label{font-size:11px;margin-bottom:6px}
+}
 
 /* Filtro por cuota */
 .cuota-filter{margin:0 0 20px;padding:16px 18px;border-radius:16px;background:linear-gradient(135deg,#fffce8,#fff9d0);border:1px solid #f0e68c}
@@ -620,6 +652,37 @@ button{-webkit-tap-highlight-color:rgba(0,0,0,.06)}
 
 <script>
 const WHATSAPP = "5493815844978"; // <-- REEMPLAZAR
+const WA_PREFIX = "Tienda Sucredito.";
+
+function productPageUrl(p){
+  try {
+    var base = location.origin + location.pathname;
+    return base + (base.indexOf("?") >= 0 ? "&" : "?") + "p=" + encodeURIComponent(p.id);
+  } catch (e) {
+    return location.href.split("?")[0].split("#")[0] + "?p=" + encodeURIComponent(p.id);
+  }
+}
+
+function mensajeWhatsAppProducto(p, cuotaOpt){
+  var lineas = [WA_PREFIX, ""];
+  lineas.push("Quiero consultar por: " + (p.marca || "") + " " + (p.nombre || "") + ".");
+  if (cuotaOpt && cuotaOpt.cuotas) {
+    lineas.push("Me interesa en " + cuotaOpt.cuotas + " cuotas de $ " + pts(cuotaOpt.valor_cuota) + ".");
+  }
+  lineas.push("");
+  lineas.push("Link del producto:");
+  lineas.push(productPageUrl(p));
+  return lineas.join("\n");
+}
+
+function mensajeWhatsAppGeneral(){
+  return WA_PREFIX + "\n\nHola, quiero consultar por los productos de la página de Día de la Madre.";
+}
+
+function openWhatsApp(text){
+  window.open("https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(text), "_blank");
+}
+
 
 window.addEventListener("load", () => {
   setTimeout(() => { const intro = document.getElementById("introLogo"); if (intro) intro.remove(); }, 1900);
@@ -688,21 +751,26 @@ function renderStockTag(stock){
 
 /* Compartir producto */
 async function shareProduct(id){
-const p = productos.find(x => String(x.id) === String(id));
-if (!p) return;
-const pref = cuotaPreferida(p);
-const url = location.origin + location.pathname + "?p=" + encodeURIComponent(p.id);
-const text = "Mirá este regalo para el Día de la Madre: " + p.marca + " " + p.nombre + (pref ? " · " + pref.cuotas + " cuotas de $ " + pts(pref.valor_cuota) : "");
-trackEvent("Compartir", "clic", p.marca + " " + p.nombre);
-if (navigator.share) {
-try { await navigator.share({ title: p.marca + " " + p.nombre, text: text, url: url }); return; }
-catch (e) { if (e && e.name === "AbortError") return; }
-}
-window.open("https://wa.me/?text=" + encodeURIComponent(text + " " + url), "_blank");
+  const p = productos.find(x => String(x.id) === String(id));
+  if (!p) return;
+  const pref = cuotaPreferida(p);
+  const text = mensajeWhatsAppProducto(p, pref);
+  const url = productPageUrl(p);
+  trackEvent("Compartir", "clic", p.marca + " " + p.nombre);
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: (p.marca || "") + " " + (p.nombre || ""), text: text, url: url });
+      return;
+    } catch (e) {
+      if (e && e.name === "AbortError") return;
+    }
+  }
+  openWhatsApp(text);
 }
 function abrirProductoCompartido(){
-var pid = new URLSearchParams(location.search).get("p");
-if (pid) setTimeout(function(){ openProduct(pid); }, 1900);
+  var params = new URLSearchParams(location.search);
+  var pid = params.get("p") || params.get("producto");
+  if (pid) setTimeout(function(){ openProduct(pid); }, 900);
 }
 
 /* Filtro por cuota mensual: rango mín-máx (usa la cuota más baja de cada producto) */
@@ -878,10 +946,8 @@ function openProduct(id){
   renderModalFinance(p);
   actualizarBotonWA(p);
   document.getElementById("modalBuy").onclick = () => {
-    let text = `Hola, quiero consultar por el ${p.marca} ${p.nombre} que vi en la página de Día de la Madre de Sucrédito.`;
-    if (cuotaSeleccionada) text += ` Me interesa en ${cuotaSeleccionada.cuotas} cuotas de $ ${pts(cuotaSeleccionada.valor_cuota)}.`;
     trackEvent("WhatsApp", "clic_producto", `${p.marca} ${p.nombre}`);
-    window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`, "_blank");
+    openWhatsApp(mensajeWhatsAppProducto(p, cuotaSeleccionada));
   };
   document.getElementById("modal").classList.add("open");
   document.getElementById("modal").setAttribute("aria-hidden","false");
@@ -895,7 +961,7 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal()
 
 function openGeneralWhatsApp(){
   trackEvent("WhatsApp", "clic_general", "Consulta general");
-  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Hola, quiero consultar por los productos de la página de Día de la Madre de Sucrédito.")}`, "_blank");
+  openWhatsApp(mensajeWhatsAppGeneral());
 }
 
 function resetCatalogo(){
