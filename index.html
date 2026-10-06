@@ -1003,8 +1003,7 @@ function openProduct(id){
   if (!p) return;
   trackEvent("Producto", "vista", `${p.marca} ${p.nombre}`);
   cuotaSeleccionada = null;
-  document.getElementById("modalImg").src = p.imagen || "";
-  document.getElementById("modalImg").alt = `${p.marca} ${p.nombre}`;
+  setModalGallery(p);
   document.getElementById("modalBrand").textContent = p.marca || "";
   document.getElementById("modalName").textContent = p.nombre || "";
   document.getElementById("modalSpecs").innerHTML = (p.specs||[]).map(s => `<div>${escHtml(s)}</div>`).join("");
