@@ -414,6 +414,22 @@ button{-webkit-tap-highlight-color:rgba(0,0,0,.06)}
 .specs{flex:1 0 auto}
 .stock-tag{margin-bottom:0}
 .buy{margin-top:12px}
+
+/* Galería modal multi-imagen */
+.modal-gallery{display:flex;flex-direction:column;gap:10px;min-width:0}
+.modal-gallery .modal-img{width:100%;max-height:360px;object-fit:contain;background:#f7f8fa;border-radius:14px}
+.modal-thumbs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.modal-thumbs button{
+  width:56px;height:56px;padding:0;border:2px solid #e7eaf0;border-radius:10px;
+  background:#fff;overflow:hidden;cursor:pointer;
+}
+.modal-thumbs button.active{border-color:#F02E78;box-shadow:0 0 0 2px rgba(240,46,120,.2)}
+.modal-thumbs img{width:100%;height:100%;object-fit:contain;display:block}
+@media(max-width:760px){
+  .modal-gallery .modal-img{max-height:240px}
+  .modal-thumbs button{width:48px;height:48px}
+}
+
 </style>
 </head>
 <body>
@@ -617,7 +633,10 @@ button{-webkit-tap-highlight-color:rgba(0,0,0,.06)}
   <div class="modal-box">
     <button class="modal-close" onclick="closeModal()" aria-label="Cerrar" type="button">×</button>
     <div class="modal-grid">
-      <img id="modalImg" class="modal-img" src="" alt="">
+      <div class="modal-gallery">
+        <img id="modalImg" class="modal-img" src="" alt="">
+        <div id="modalThumbs" class="modal-thumbs" hidden></div>
+      </div>
       <div class="modal-content">
         <div id="modalBrand" class="brand-name"></div>
         <h2 id="modalName"></h2>
@@ -932,6 +951,44 @@ function actualizarBotonWA(p){
   else span.textContent = "Comprar por WhatsApp";
 }
 
+
+function fotosProducto(p){
+  var list = [];
+  if (Array.isArray(p.imagenes)) list = p.imagenes.slice();
+  else if (typeof p.imagenes === "string" && p.imagenes) {
+    try { var parsed = JSON.parse(p.imagenes); if (Array.isArray(parsed)) list = parsed; } catch(e) {}
+  }
+  list = list.map(function(u){ return String(u||"").trim(); }).filter(Boolean);
+  if (p.imagen && list.indexOf(p.imagen) < 0) list.unshift(p.imagen);
+  var seen = {};
+  return list.filter(function(u){ if (seen[u]) return false; seen[u]=1; return true; });
+}
+function setModalGallery(p){
+  var fotos = fotosProducto(p);
+  var main = document.getElementById("modalImg");
+  var thumbs = document.getElementById("modalThumbs");
+  if (!main) return;
+  main.src = fotos[0] || "";
+  main.alt = (p.marca||"") + " " + (p.nombre||"");
+  if (!thumbs) return;
+  if (fotos.length <= 1) {
+    thumbs.hidden = true;
+    thumbs.innerHTML = "";
+    return;
+  }
+  thumbs.hidden = false;
+  thumbs.innerHTML = fotos.map(function(url, i){
+    return '<button type="button" class="'+(i===0?"active":"")+'" data-i="'+i+'"><img src="'+escHtml(url)+'" alt=""></button>';
+  }).join("");
+  thumbs.querySelectorAll("button").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var i = Number(btn.getAttribute("data-i"));
+      main.src = fotos[i] || "";
+      thumbs.querySelectorAll("button").forEach(function(b){ b.classList.toggle("active", b===btn); });
+    });
+  });
+}
+
 function openProduct(id){
   const p = productos.find(x => String(x.id) === String(id));
   if (!p) return;
@@ -1093,6 +1150,11 @@ window.catImgFallback = function(imgEl){
         cuotas_opciones: opts,
         badge: p.badge || undefined,
         imagen: p.imagen || "",
+        imagenes: (function(){
+          var im = p.imagenes;
+          if (typeof im === "string") { try { im = JSON.parse(im); } catch(e) { im = []; } }
+          return Array.isArray(im) ? im : [];
+        })(),
         specs: Array.isArray(p.specs) ? p.specs : [],
         stock: Number(p.stock || 0)
       };
@@ -1187,10 +1249,5 @@ c.classList.add("rv"); c.style.setProperty("--d", (i % 4) * 60 + "ms"); io.obser
 new MutationObserver(prep).observe(grid, {childList: true}); prep();
 })();
 </script>
-
-  <!-- Cloudflare Web Analytics -->
-<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "e4bff5fb0b1c42b996c14cf19bf481b9"}'></script>
-<!-- End Cloudflare Web Analytics -->
-  
 </body>
 </html>
