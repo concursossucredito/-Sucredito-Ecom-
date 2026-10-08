@@ -5,6 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Regalos para mamá exclusivos para clientes Sucrédito. Celulares, parlantes, smartwatches, audio y más.">
 <title>Sucrédito · Día de la Madre · Catálogo</title>
+<!-- Open Graph / WhatsApp / redes -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sucrédito">
+<meta property="og:title" content="Sucrédito · Día de la Madre · Regalos para mamá">
+<meta property="og:description" content="Celulares, parlantes, relojes y más. Exclusivo para clientes Sucrédito. Financiación propia.">
+<meta property="og:image" content="https://concursossucredito.github.io/-Sucredito-Ecom-/assets/hero-dia-madre.webp">
+<meta property="og:image:alt" content="Día de la Madre · Sucrédito">
+<meta property="og:locale" content="es_AR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sucrédito · Día de la Madre · Regalos para mamá">
+<meta name="twitter:description" content="Celulares, parlantes, relojes y más. Exclusivo para clientes Sucrédito.">
+<meta name="twitter:image" content="https://concursossucredito.github.io/-Sucredito-Ecom-/assets/hero-dia-madre.webp">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/favicon-180.png">
@@ -127,6 +139,17 @@ button{-webkit-tap-highlight-color:rgba(0,0,0,.06)}
 .catalog-head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:18px}
 .clear-filter{border:0;background:none;font-weight:700;color:var(--pink);display:none}
 .products{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+/* Destacados */
+.featured-sec{padding-top:8px}
+.featured-sec[hidden]{display:none!important}
+.featured-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:16px}
+.featured-eyebrow{display:inline-block;font-size:10px;font-weight:900;letter-spacing:1.4px;color:var(--pink);margin-bottom:6px}
+.featured-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.featured-grid .card{border-color:#f0d4e0;box-shadow:0 10px 28px rgba(240,46,120,.08)}
+.featured-grid .badge{background:var(--pink);color:#fff}
+@media(max-width:1050px){.featured-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:760px){.featured-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}}
+@media(max-width:420px){.featured-grid{grid-template-columns:1fr}}
 .load-more-wrap{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 0 8px}
 .load-more-btn{border:0;border-radius:28px;background:var(--ink);color:#fff;font-weight:800;padding:14px 28px;font-size:15px;display:inline-flex;align-items:center;gap:8px;box-shadow:0 8px 22px rgba(20,36,58,.14);transition:transform .15s,filter .15s}
 .load-more-btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
@@ -603,10 +626,21 @@ button{-webkit-tap-highlight-color:rgba(0,0,0,.06)}
       </div>
     </section>
 
+    <section class="section featured-sec" id="destacados" hidden>
+      <div class="featured-head">
+        <div>
+          <span class="featured-eyebrow">ELEGIDOS PARA MAMÁ</span>
+          <h2 class="section-title">Destacados</h2>
+          <p class="section-sub">Los regalos que más convienen este Día de la Madre.</p>
+        </div>
+      </div>
+      <div class="featured-grid" id="featured"></div>
+    </section>
+
     <section class="section" id="productos">
       <div class="catalog-head">
         <div>
-          <h2 class="section-title">Productos destacados</h2>
+          <h2 class="section-title">Catálogo</h2>
           <p class="section-sub" id="resultText">Cargando productos…</p>
         </div>
         <button class="clear-filter" id="clearFilter" type="button">Ver todos</button>
@@ -927,7 +961,10 @@ async function shareProduct(id){
 function abrirProductoCompartido(){
   var params = new URLSearchParams(location.search);
   var pid = params.get("p") || params.get("producto");
-  if (pid) setTimeout(function(){ openProduct(pid); }, 900);
+  if (!pid) return;
+  var p = productos.find(function(x){ return String(x.id) === String(pid); });
+  if (p) applyProductShareMeta(p);
+  setTimeout(function(){ openProduct(pid); }, 900);
 }
 
 /* Filtro por cuota mensual: rango mín-máx (usa la cuota más baja de cada producto) */
@@ -1010,6 +1047,78 @@ function verMasProductos(){
   trackEvent("Catálogo", "ver_mas", String(visibles));
   renderProductos(false);
 }
+function productCardHTML(p, opts){
+  opts = opts || {};
+  const badge = opts.forceBadge || p.badge;
+  return `
+    <article class="card" role="button" tabindex="0" onclick="openProduct('${escHtml(p.id)}')" onkeydown="if(event.key==='Enter')openProduct('${escHtml(p.id)}')">
+      ${badge ? `<div class="badge">${escHtml(badge)}</div>` : ""}
+      <button class="favorite" type="button" aria-label="Compartir" data-share="${escHtml(p.id)}" onclick="event.stopPropagation();shareProduct(this.dataset.share)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button>
+      <img class="product-img" src="${escHtml(p.imagen||"")}" alt="${escHtml(p.marca)} ${escHtml(p.nombre)}" loading="lazy" decoding="async">
+      <div class="card-body">
+        <div class="brand-name">${escHtml(p.marca||"")}</div>
+        <div class="product-name">${escHtml(p.nombre||"")}</div>
+        <div class="specs">${(p.specs||[]).map(s=>`<div>${escHtml(s)}</div>`).join("")}</div>
+        ${renderFinanceTag(p)}
+        ${renderStockTag(p.stock)}
+        <button class="buy" type="button" onclick="event.stopPropagation();openProduct('${escHtml(p.id)}')">
+          <span class="wa-icon wa-btn-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.18 2.095 3.195 5.076 4.483.709.3 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></span>
+          <span>Comprar por WhatsApp</span>
+        </button>
+      </div>
+    </article>`;
+}
+function esDestacado(p){
+  const b = normalizarBusqueda(p.badge || "");
+  return /destacado|elegido|top|star|★|nuevo/.test(b);
+}
+function renderDestacados(){
+  const sec = document.getElementById("destacados");
+  const grid = document.getElementById("featured");
+  if (!sec || !grid) return;
+  let list = productos.filter(esDestacado);
+  if (!list.length) list = productos.filter(p => p.badge);
+  if (!list.length) list = productos.slice(0, 4);
+  else list = list.slice(0, 4);
+  if (!list.length) { sec.hidden = true; grid.innerHTML = ""; return; }
+  sec.hidden = false;
+  grid.innerHTML = list.map(p => productCardHTML(p, { forceBadge: p.badge || "Destacado" })).join("");
+}
+function setMeta(attr, key, value){
+  if (!value) return;
+  let el = document.querySelector('meta[' + attr + '="' + key + '"]');
+  if (!el) {
+    el = document.createElement("meta");
+    el.setAttribute(attr, key);
+    document.head.appendChild(el);
+  }
+  el.setAttribute("content", value);
+}
+function applyProductShareMeta(p){
+  if (!p) return;
+  const title = ((p.marca || "") + " " + (p.nombre || "")).trim() + " · Sucrédito Día de la Madre";
+  const pref = cuotaPreferida(p);
+  const desc = pref
+    ? (p.marca + " " + p.nombre + " · " + pref.cuotas + " cuotas de $ " + pts(pref.valor_cuota) + ". Exclusivo clientes Sucrédito.")
+    : ((p.marca || "") + " " + (p.nombre || "") + ". Exclusivo clientes Sucrédito.");
+  const img = p.imagen || "https://concursossucredito.github.io/-Sucredito-Ecom-/assets/hero-dia-madre.webp";
+  const url = productPageUrl(p);
+  document.title = title;
+  setMeta("name", "description", desc);
+  setMeta("property", "og:type", "product");
+  setMeta("property", "og:title", title);
+  setMeta("property", "og:description", desc);
+  setMeta("property", "og:image", img);
+  setMeta("property", "og:url", url);
+  setMeta("name", "twitter:title", title);
+  setMeta("name", "twitter:description", desc);
+  setMeta("name", "twitter:image", img);
+  try {
+    let link = document.querySelector('link[rel="canonical"]');
+    if (!link) { link = document.createElement("link"); link.rel = "canonical"; document.head.appendChild(link); }
+    link.href = url;
+  } catch (e) {}
+}
 function renderProductos(resetPage){
   if (resetPage !== false) resetVisibles();
   const lista = filtrarLista();
@@ -1026,24 +1135,7 @@ function renderProductos(resetPage){
     productsEl.innerHTML = `<div class="empty">No encontramos productos.<br><br><button class="primary" type="button" onclick="resetCatalogo()">Ver todos</button></div>`;
     return;
   }
-  productsEl.innerHTML = mostrando.map(p => `
-    <article class="card" role="button" tabindex="0" onclick="openProduct('${escHtml(p.id)}')" onkeydown="if(event.key==='Enter')openProduct('${escHtml(p.id)}')">
-      ${p.badge ? `<div class="badge">${escHtml(p.badge)}</div>` : ""}
-      <button class="favorite" type="button" aria-label="Compartir" data-share="${escHtml(p.id)}" onclick="event.stopPropagation();shareProduct(this.dataset.share)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button>
-      <img class="product-img" src="${escHtml(p.imagen||"")}" alt="${escHtml(p.marca)} ${escHtml(p.nombre)}" loading="lazy" decoding="async">
-      <div class="card-body">
-        <div class="brand-name">${escHtml(p.marca||"")}</div>
-        <div class="product-name">${escHtml(p.nombre||"")}</div>
-        <div class="specs">${(p.specs||[]).map(s=>`<div>${escHtml(s)}</div>`).join("")}</div>
-        ${renderFinanceTag(p)}
-        ${renderStockTag(p.stock)}
-        <button class="buy" type="button" onclick="event.stopPropagation();openProduct('${escHtml(p.id)}')">
-          <span class="wa-icon wa-btn-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.18 2.095 3.195 5.076 4.483.709.3 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></span>
-          <span>Comprar por WhatsApp</span>
-        </button>
-      </div>
-    </article>
-  `).join("") + (quedan > 0 ? `
+  productsEl.innerHTML = mostrando.map(p => productCardHTML(p)).join("") + (quedan > 0 ? `
     <div class="load-more-wrap">
       <button type="button" class="load-more-btn" onclick="verMasProductos()">Ver más productos <span aria-hidden="true">↓</span></button>
       <span class="load-more-hint">Quedan ${quedan} producto${quedan===1?"":"s"}</span>
@@ -1131,6 +1223,7 @@ function openProduct(id){
   const p = productos.find(x => String(x.id) === String(id));
   if (!p) return;
   trackEvent("Producto", "vista", `${p.marca} ${p.nombre}`);
+  applyProductShareMeta(p);
   cuotaSeleccionada = null;
   setModalGallery(p);
   document.getElementById("modalBrand").textContent = p.marca || "";
@@ -1345,6 +1438,7 @@ window.catImgFallback = function(imgEl){
         if (btn) btn.click();
       });
     });
+    renderDestacados();
     renderProductos();
   initCuotaFilter();
 abrirProductoCompartido();
