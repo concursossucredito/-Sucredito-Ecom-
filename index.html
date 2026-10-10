@@ -816,6 +816,13 @@ function mensajeWhatsAppProducto(p, cuotaOpt){
   if (cuotaOpt && cuotaOpt.cuotas) {
     lineas.push("Me interesa en " + cuotaOpt.cuotas + " cuotas de $ " + pts(cuotaOpt.valor_cuota) + ".");
   }
+  // Imagen directa: WhatsApp suele mostrar preview de JPG/PNG/WebP públicos
+  // (el link de la página no cambia el OG porque el crawler no ejecuta JS en GitHub Pages)
+  var img = (p.imagen || "").trim();
+  if (img) {
+    lineas.push("");
+    lineas.push(img);
+  }
   lineas.push("");
   lineas.push("Link del producto:");
   lineas.push(productPageUrl(p));
